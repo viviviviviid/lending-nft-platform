@@ -18,6 +18,7 @@ contract Lending {
     function listing(string memory nftHash, uint256 amount, uint256 duration, uint256 APR) public {
         NFT memory newNFT = NFT(nftHash, amount, duration, APR);
         NFTmapping[msg.sender] = newNFT;
+
         
     }
 }
