@@ -1,3 +1,13 @@
+### 구조
+
+1. JS - 프론트엔드
+2. Go - 백엔드
+3. Solidity - 컨트랙트
+4. AWS RDS PostgreSQL - 데이터베이스
+5. AWS EC2 - 서버 배포
+6. Firebase - 프론트 배포
+
+
 ### NFT 담보 대출 흐름
 
 1. **Borrower**가 자기 지갑 속 어떤 NFT를 담보로 돈을 빌릴 건지 결정한다.
