@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Network, Alchemy } from 'alchemy-sdk';
+import './styles/listingModal.css'; // 추가된 부분
 
 const settings = {
   apiKey: process.env.REACT_APP_ALCHEMY_KEY,
@@ -11,11 +12,15 @@ const alchemy = new Alchemy(settings);
 const NFTList = () => {
   const [connectedWallet, setConnectedWallet] = useState(null);
   const [nfts, setNFTs] = useState([]);
+  const [selectedNFT, setSelectedNFT] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [amount, setAmount] = useState('');
+  const [duration, setDuration] = useState('');
+  const [apr, setApr] = useState('');
 
   const connectWallet = async () => {
     try {
       if (!window.ethereum) {
-        // Metamask 초기화 코드
         window.ethereum = new window.Web3(window.currentProvider);
       }
 
@@ -27,7 +32,6 @@ const NFTList = () => {
 
       console.log('Wallet Connected:', connectedAddr);
 
-      // NFT 불러오기
       const nftsForOwner = await alchemy.nft.getNftsForOwner(connectedAddr);
       console.log('Number of NFTs found:', nftsForOwner.totalCount);
       setNFTs(nftsForOwner.ownedNfts);
@@ -36,10 +40,34 @@ const NFTList = () => {
     }
   };
 
+  const disconnectWallet = async () => {
+    try {
+      await window.ethereum.request({ method: 'wallet_requestPermissions', params: [{ eth_accounts: {} }] });
+      setConnectedWallet(null);
+      console.log('Wallet Disconnected');
+    } catch (error) {
+      console.error('Error disconnecting wallet:', error);
+    }
+  };
+  
+  const openModal = (nft) => {
+    setSelectedNFT(nft);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setSelectedNFT(null);
+    setIsModalOpen(false);
+  };
+
+  const submitLoanProposal = () => {
+    console.log('Loan proposal submitted:', { amount, duration, apr, selectedNFT });
+    closeModal();
+  };
+
   useEffect(() => {
     connectWallet();
 
-    // 컴포넌트 언마운트 시 cleanup 코드 추가
     return () => {
       if (window.ethereum) {
         window.ethereum.removeAllListeners('accountsChanged');
@@ -47,7 +75,7 @@ const NFTList = () => {
         window.ethereum.removeAllListeners('disconnect');
       }
     };
-  }, []); // 빈 배열은 컴포넌트 마운트 시에만 실행
+  }, []);
 
   window.onbeforeunload = () => {
     if (window.ethereum) {
@@ -63,6 +91,7 @@ const NFTList = () => {
       {connectedWallet ? (
         <div>
           <p>연결된 지갑: {connectedWallet}</p>
+          <button onClick={disconnectWallet}>지갑 해제</button>
         </div>
       ) : (
         <button onClick={connectWallet}>지갑 연결</button>
@@ -80,12 +109,39 @@ const NFTList = () => {
               alt={`NFT Image for ${nft.tokenId}`}
               style={{ maxWidth: '200px' }}
               onError={(e) => {
-                e.target.src = 'fallback-image-url'; // 대체 이미지 URL 또는 기본 이미지로 교체
+                e.target.src = 'fallback-image-url';
               }}
             />
           )}
+          <button onClick={() => openModal(nft)}>담보로 맡기기</button>
         </div>
       ))}
+
+
+      {isModalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close" onClick={closeModal}>
+              &times;
+            </span>
+            <h2>담보로 맡기기</h2>
+            <p>NFT 정보: {selectedNFT.tokenId}</p>
+            <label>
+              Amount:
+              <input type="text" value={amount} onChange={(e) => setAmount(e.target.value)} />
+            </label>
+            <label>
+              Duration:
+              <input type="text" value={duration} onChange={(e) => setDuration(e.target.value)} />
+            </label>
+            <label>
+              APR:
+              <input type="text" value={apr} onChange={(e) => setApr(e.target.value)} />
+            </label>
+            <button onClick={submitLoanProposal}>대출 제안</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
