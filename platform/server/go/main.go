@@ -1,7 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/m/go/rest"
+)
 
 func main() {
-	fmt.Println("start")
+	fmt.Println("Start")
+	rest.Start()
 }
