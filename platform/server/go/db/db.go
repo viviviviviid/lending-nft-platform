@@ -7,29 +7,21 @@ import (
 	_ "github.com/lib/pq"
 )
 
-const (
-	host     = "localhost"
-	port     = 5432
-	user     = "viviviviviid"
-	password = ""
-	dbname   = "postgres"
-)
+var db *sql.DB
 
 func Start() {
-	// 밑 정보가 제대로 들어가있는지 확인하기. 왜 데이터베이스 viviviviviid가 존재하지 않는지 에러가 뜨는게 이해가 안됨
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		host, port, user, password, dbname)
-	db, err := sql.Open("postgres", psqlInfo)
-	if err != nil {
-		panic(err)
-	}
-	defer db.Close()
+	var err error
 
-	err = db.Ping()
+	connStr := "postgres://viviviviviid:password@localhost/lending?sslmode=disable"
+	db, err = sql.Open("postgres", connStr)
+
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println("Successfully connected!")
+	if err = db.Ping(); err != nil {
+		panic(err)
+	}
+
+	fmt.Println("The database is connected")
 }
