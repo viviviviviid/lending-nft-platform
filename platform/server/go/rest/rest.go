@@ -2,6 +2,7 @@ package rest
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -22,6 +23,7 @@ func buy(rw http.ResponseWriter, r *http.Request) {
 }
 
 func Start() {
+	fmt.Println("REST API")
 	http.HandleFunc("/", documentation)
 	http.ListenAndServe(":8080", nil)
 }

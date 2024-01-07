@@ -9,6 +9,6 @@ import (
 
 func main() {
 	fmt.Println("Start")
-	db.Start()
+	db.InitDB()
 	rest.Start()
 }
