@@ -20,6 +20,11 @@ func InitDB() {
 }
 
 func SignUp(addr string) {
+
+	//
+	// 예외처리 : 우선 SELECT로 확인해서 있으면 revert 및 login api 쏘도록 지시
+	//
+
 	result, err := db.Exec("INSERT INTO users(address) VALUES($1)", addr)
 	utils.HandleErr(err)
 	fmt.Println(result)
