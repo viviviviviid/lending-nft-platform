@@ -14,6 +14,10 @@ type User struct {
 	Address string
 }
 
+const (
+	ErrExist = "pq: duplicate key value violates unique constraint \"users_unique\""
+)
+
 var u = User{}
 
 func documentation(rw http.ResponseWriter, r *http.Request) {
@@ -24,12 +28,25 @@ func documentation(rw http.ResponseWriter, r *http.Request) {
 }
 
 func signUp(res http.ResponseWriter, req *http.Request) {
-	if req.Method == "POST" {
-		body, err := io.ReadAll(req.Body)
-		utils.HandleErr(err)
-		utils.HandleErr(json.Unmarshal(body, &u))
-		db.SignUp(u.Address)
+	body, err := io.ReadAll(req.Body)
+	utils.HandleErr(err)
+	utils.HandleErr(json.Unmarshal(body, &u))
+
+	result, err := db.SignUp(u.Address)
+	if err != nil {
+		switch err.Error() {
+		case ErrExist:
+			res.WriteHeader(http.StatusOK) // 200 OK
+			res.Write([]byte("Already Exist Account. Please Login First"))
+		default:
+			res.WriteHeader(http.StatusBadRequest) // 400 Bad Request
+			res.Write([]byte(err.Error()))
+		}
+	} else {
+		res.WriteHeader(http.StatusCreated) // 201 Created
+		res.Write([]byte(result))
 	}
+
 }
 
 func signIn(rw http.ResponseWriter, r *http.Request) {
