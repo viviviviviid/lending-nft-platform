@@ -6,32 +6,34 @@ function App() {
   const [account, setAccount] = useState('');
   const [web3, setWeb3] = useState();
 
-  const connectWallet = async() => {
+  const connectWallet = async () => {
     let accounts = await window.ethereum.request({
       method: "eth_requestAccounts",
-    })
+    });
     setAccount(accounts[0]);
-  }
+  };
 
   useEffect(() => {
-    if(typeof window.ethereum != 'undefined'){
-      try{
+    if (typeof window.ethereum !== 'undefined') {
+      try {
         const web = new Web3(window.ethereum);
-        setWeb3(web)
-      
-      }catch(err){
+        setWeb3(web);
+      } catch (err) {
         console.log(err);
       }
     }
-  })
+  }, []);
+
   return (
     <div className="App">
       <h1>Lend with NFT!</h1>
-      <button 
+      <button
         className="Metamask"
         onClick={() => {
           connectWallet();
-        }}>Connect to Metamask
+        }}
+      >
+        Connect to Metamask
       </button>
       <div className="userInfo">주소: {account}</div>
     </div>
@@ -39,4 +41,3 @@ function App() {
 }
 
 export default App;
-
