@@ -1,6 +1,9 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Web3 from 'web3';
-import './App.css';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import './styles/App.css';
+import Header from './component/header'; // Header 컴포넌트 추가
+import Mypage from './component/myPage'; // Mypage 컴포넌트 추가
 
 function App() {
   const [account, setAccount] = useState('');
@@ -11,7 +14,7 @@ function App() {
       method: "eth_requestAccounts",
     });
     setAccount(accounts[0]);
-  };
+  }
 
   useEffect(() => {
     if (typeof window.ethereum !== 'undefined') {
@@ -25,18 +28,23 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <h1>Lend with NFT!</h1>
-      <button
-        className="Metamask"
-        onClick={() => {
-          connectWallet();
-        }}
-      >
-        Connect to Metamask
-      </button>
-      <div className="userInfo">주소: {account}</div>
-    </div>
+    <Router>
+      <div className="App">
+        <Header account={account} connectWallet={connectWallet} />
+        <button
+          className="Metamask"
+          onClick={() => {
+            connectWallet();
+          }}>
+          Connect to Metamask
+        </button>
+        <div className="userInfo">주소: {account}</div>
+        <Routes>
+          <Route path="/mypage" element={<Mypage web3={web3} account={account} />} />
+          {/* 다른 라우트들 추가 */}
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

@@ -1,0 +1,72 @@
+body {
+  background-color: #001f3f; /* 배경색은 파란색 */
+  color: #ffffff; /* 글꼴 색상은 흰색 */
+  font-family: 'Courier New', Courier, monospace;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.App {
+  text-align: center;
+}
+
+h1 {
+  color: #ffffff; /* 헤더 텍스트 색상은 흰색 */
+}
+
+.Metamask {
+  background-color: #000080; /* 버튼 배경색은 진한 파란색 */
+  color: #ffffff; /* 버튼 글씨 색상은 흰색 */
+  font-size: 16px;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.userInfo {
+  margin-top: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+}
+
+.pageButton {
+  background-color: #000080;
+  color: #ffffff;
+  font-size: 16px;
+  margin-left: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.pageContent {
+  margin-top: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+}
+
+.pageLink {
+  text-decoration: none;
+  color: #ffffff;
+  font-size: 16px;
+  margin-left: 10px;
+}
+
+.Metamask {
+  /* 기존 스타일 유지 */
+}
+
+.userInfo {
+  margin-top: 10px;
+}
