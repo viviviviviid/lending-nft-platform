@@ -10,6 +10,10 @@ import (
 
 var db *sql.DB
 
+const (
+	ErrExist = "pq: duplicate key value violates unique constraint \"users_unique\""
+)
+
 func InitDB() {
 	var err error
 	connStr := "postgres://viviviviviid:password@localhost/lending?sslmode=disable"
@@ -21,13 +25,16 @@ func InitDB() {
 
 func SignUp(addr string) {
 
-	//
-	// 예외처리 : 우선 SELECT로 확인해서 있으면 revert 및 login api 쏘도록 지시
-	//
-
 	result, err := db.Exec("INSERT INTO users(address) VALUES($1)", addr)
+
+	if err.Error() == ErrExist {
+		// 이미 회원가입된 지갑이므로 login 하도록 지시
+	}
+
 	utils.HandleErr(err)
+
 	fmt.Println(result)
+	// 회원가입 완료 되었다는 메세지와 함께, login 하도록 지시
 }
 
 func SignIn(addr string) {
