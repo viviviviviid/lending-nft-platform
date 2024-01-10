@@ -9,6 +9,7 @@ const settings = {
   network: Network.ETH_MAINNET,
 };
 
+
 const alchemy = new Alchemy(settings);
 
 const NFTList = ({ web3, account }) => {
