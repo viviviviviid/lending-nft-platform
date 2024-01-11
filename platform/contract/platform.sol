@@ -5,9 +5,10 @@ contract Lending {
 
     event NewListing(address owner, NFT info);
 
-     struct NFT{
+    struct NFT{
         bytes32 hash;
-        string nftHash;
+        string collectionHash;
+        uint256 collectionNum;
         uint256 amount;
         uint256 duration;
         uint256 APR;
@@ -15,8 +16,8 @@ contract Lending {
 
     mapping (address => NFT) public list;
     
-    function _listing(string memory nftHash, uint256 amount, uint256 duration, uint256 APR) public {
-        NFT memory info = NFT("", nftHash, amount, duration, APR);
+    function _listing(string memory collectionHash, uint256 collectionNum, uint256 amount, uint256 duration, uint256 APR) public {
+        NFT memory info = NFT("", collectionHash, collectionNum, amount, duration, APR);
         info.hash = _structHash(info);
         list[msg.sender] = info;
         emit NewListing(msg.sender, info);
