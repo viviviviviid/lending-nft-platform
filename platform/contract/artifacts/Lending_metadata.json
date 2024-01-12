@@ -17,9 +17,9 @@
 					{
 						"components": [
 							{
-								"internalType": "bytes32",
-								"name": "hash",
-								"type": "bytes32"
+								"internalType": "address",
+								"name": "poster",
+								"type": "address"
 							},
 							{
 								"internalType": "string",
@@ -45,10 +45,15 @@
 								"internalType": "uint256",
 								"name": "APR",
 								"type": "uint256"
+							},
+							{
+								"internalType": "bytes32",
+								"name": "status",
+								"type": "bytes32"
 							}
 						],
 						"indexed": false,
-						"internalType": "struct Lending.NFT",
+						"internalType": "struct Lending.ListingInfo",
 						"name": "info",
 						"type": "tuple"
 					}
@@ -57,46 +62,32 @@
 				"type": "event"
 			},
 			{
+				"anonymous": false,
 				"inputs": [
 					{
+						"indexed": false,
+						"internalType": "bytes32",
+						"name": "hash",
+						"type": "bytes32"
+					},
+					{
+						"indexed": false,
 						"internalType": "string",
-						"name": "collectionHash",
+						"name": "status",
 						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "collectionNum",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "amount",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "duration",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "APR",
-						"type": "uint256"
 					}
 				],
-				"name": "_listing",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
+				"name": "StatusChange",
+				"type": "event"
 			},
 			{
 				"inputs": [
 					{
 						"components": [
 							{
-								"internalType": "bytes32",
-								"name": "hash",
-								"type": "bytes32"
+								"internalType": "address",
+								"name": "poster",
+								"type": "address"
 							},
 							{
 								"internalType": "string",
@@ -122,9 +113,14 @@
 								"internalType": "uint256",
 								"name": "APR",
 								"type": "uint256"
+							},
+							{
+								"internalType": "bytes32",
+								"name": "status",
+								"type": "bytes32"
 							}
 						],
-						"internalType": "struct Lending.NFT",
+						"internalType": "struct Lending.ListingInfo",
 						"name": "src",
 						"type": "tuple"
 					}
@@ -141,15 +137,40 @@
 				"type": "function"
 			},
 			{
-				"inputs": [],
-				"name": "_viewListing",
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "addr",
+						"type": "address"
+					}
+				],
+				"name": "getListing",
+				"outputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "num",
+						"type": "uint256"
+					}
+				],
+				"name": "getListingInfo",
 				"outputs": [
 					{
 						"components": [
 							{
-								"internalType": "bytes32",
-								"name": "hash",
-								"type": "bytes32"
+								"internalType": "address",
+								"name": "poster",
+								"type": "address"
 							},
 							{
 								"internalType": "string",
@@ -175,9 +196,14 @@
 								"internalType": "uint256",
 								"name": "APR",
 								"type": "uint256"
+							},
+							{
+								"internalType": "bytes32",
+								"name": "status",
+								"type": "bytes32"
 							}
 						],
-						"internalType": "struct Lending.NFT",
+						"internalType": "struct Lending.ListingInfo",
 						"name": "",
 						"type": "tuple"
 					}
@@ -186,20 +212,20 @@
 				"type": "function"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"name": "list",
+				"inputs": [],
+				"name": "getMyListing",
 				"outputs": [
 					{
-						"internalType": "bytes32",
-						"name": "hash",
-						"type": "bytes32"
-					},
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
 					{
 						"internalType": "string",
 						"name": "collectionHash",
@@ -226,7 +252,9 @@
 						"type": "uint256"
 					}
 				],
-				"stateMutability": "view",
+				"name": "openListing",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			}
 		],
@@ -257,12 +285,20 @@
 		"remappings": []
 	},
 	"sources": {
-		"platform.sol": {
-			"keccak256": "0xbce3bc60aac7749f2c149c808faba0c25b260380d6bd82d9bc627423f717afde",
+		"@openzeppelin/contracts/utils/Counters.sol": {
+			"keccak256": "0xf0018c2440fbe238dd3a8732fa8e17a0f9dce84d31451dc8a32f6d62b349c9f1",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://3c91d356f90bbab2718e19663847121d84be804521835519830951492c697f71",
-				"dweb:/ipfs/QmaQY4VxpZhsAwcfhDmJcQbgJdy5v1a2cGYBRiXXquZzea"
+				"bzz-raw://59e1c62884d55b70f3ae5432b44bb3166ad71ae3acd19c57ab6ddc3c87c325ee",
+				"dweb:/ipfs/QmezuXg5GK5oeA4F91EZhozBFekhq5TD966bHPH18cCqhu"
+			]
+		},
+		"platform.sol": {
+			"keccak256": "0x43fb7179ee6fefbbf164506371f293ff6d22fe7dba56cb35050bdd808e9d92ed",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://897a3dea838623bb3320876f76476f072b6b4d0d361b755eb31e419c53d30c2e",
+				"dweb:/ipfs/QmVnC22Jn3YorcXQobfWc9qteP1oe9NojkkjEFfKLgFdCn"
 			]
 		}
 	},
