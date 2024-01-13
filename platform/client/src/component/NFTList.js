@@ -6,7 +6,7 @@ import '../styles/listingModal.css'; // 추가된 부분
 
 const settings = {
   apiKey: process.env.REACT_APP_ALCHEMY_KEY,
-  network: Network.ETH_MAINNET,
+  network: Network.ETH_GOERLI,
 };
 
 const alchemy = new Alchemy(settings);

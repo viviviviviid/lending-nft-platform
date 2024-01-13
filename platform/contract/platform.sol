@@ -1,24 +1,28 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
-contract Lending {
+contract Platform {
+
+    // constructor() ERC721("NFTTransferContract", "NTC") {}    
 
     event NewListing(address owner, ListingInfo info);
     event StatusChange(bytes32 hash, string status);
 
     struct ListingInfo{
         address poster;
-        string collectionHash;
-        uint256 collectionNum;
+        address collectionAddr;
+        uint256 tokenId;
         uint256 amount;
         uint256 duration;
         uint256 APR;
-        bytes32 status; // Open, Executed, Cancelled
+        bytes32 status; // Open, Executed, Cancelled // 가스비 절약을 위해 string 대신 고정된크기의 bytes, 검색에도 빠름
     }
 
-    mapping (uint256 => ListingInfo) listNum;
+    mapping (uint256 => ListingInfo) public listNum;
     mapping (address => uint256[]) addrList;
 
     uint256 counter;
@@ -34,19 +38,35 @@ contract Lending {
     function getListingInfo(uint256 num) public view returns (ListingInfo memory) {
         return listNum[num];
     }
+
+    function getCounter() public view returns (uint256) {
+        return counter;
+    }
     
     // function getAllListing() public view returns (uint256[] memory){
     //     return addrList[msg.sender];
     // }
 
-    function openListing(string memory collectionHash, uint256 collectionNum, uint256 amount, uint256 duration, uint256 APR) public {
-        ListingInfo memory info = ListingInfo(msg.sender, collectionHash, collectionNum, amount, duration, APR, "Open");
-        ++counter; // 앞에 쓸 경우 가스 살짝 더 절약  
-        addrList[msg.sender].push(counter);
-        emit NewListing(msg.sender, info);
+    function approveAll(address collectionAddr) public {
+        IERC721(collectionAddr).setApprovalForAll(address(this), true);
     }
 
-    // 여러개를 추가했을 경우, 위 list[msg.sender] = info 때문에 최근거만 덮어쓰게됨. push 로 추가할 수 있는 이중매핑 필요
+    function isApprove(address collectionAddr) public view returns (bool) {
+        return IERC721(collectionAddr).isApprovedForAll(msg.sender, address(this));
+    }
+
+    function openListing(address collectionAddr, uint256 tokenId, uint256 amount, uint256 duration, uint256 APR) public {
+        require(amount > 0 && duration > 0 && APR > 0, "Values must over zero");
+
+        ListingInfo memory info = ListingInfo(msg.sender, collectionAddr, tokenId, amount, duration, APR, "Open");
+        listNum[counter] = info;
+        addrList[msg.sender].push(counter);
+        ++counter; // 앞에 쓸 경우 가스 살짝 더 절약  
+
+        IERC721(collectionAddr).transferFrom(msg.sender, address(this), tokenId);
+
+        emit NewListing(msg.sender, info);
+    }
 
     // function excuteListing(){
     // }
