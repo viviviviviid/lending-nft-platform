@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.22+commit.4fc1097e"
+		"version": "0.8.20+commit.a1b79de6"
 	},
 	"language": "Solidity",
 	"output": {
@@ -9,40 +9,39 @@
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "owner",
+						"name": "to",
 						"type": "address"
 					},
 					{
-						"internalType": "address",
-						"name": "operator",
-						"type": "address"
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
 					}
 				],
-				"name": "isApprovedForAll",
-				"outputs": [
-					{
-						"internalType": "bool",
-						"name": "",
-						"type": "bool"
-					}
-				],
-				"stateMutability": "view",
+				"name": "approve",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "operator",
+						"name": "from",
 						"type": "address"
 					},
 					{
-						"internalType": "bool",
-						"name": "approved",
-						"type": "bool"
+						"internalType": "address",
+						"name": "to",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
 					}
 				],
-				"name": "setApprovalForAll",
+				"name": "transferFrom",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -61,7 +60,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"platform.sol": "IERC721"
+			"test.sol": "IERC721"
 		},
 		"evmVersion": "shanghai",
 		"libraries": {},
@@ -75,36 +74,11 @@
 		"remappings": []
 	},
 	"sources": {
-		"@openzeppelin/contracts/access/Ownable.sol": {
-			"keccak256": "0xff6d0bb2e285473e5311d9d3caacb525ae3538a80758c10649a4d61029b017bb",
-			"license": "MIT",
+		"test.sol": {
+			"keccak256": "0x2b47c45cbfccdbb8d8959d6bfc28f3a88baa91e05a7f7609a012266e867ec374",
 			"urls": [
-				"bzz-raw://8ed324d3920bb545059d66ab97d43e43ee85fd3bd52e03e401f020afb0b120f6",
-				"dweb:/ipfs/QmfEckWLmZkDDcoWrkEvMWhms66xwTLff9DDhegYpvHo1a"
-			]
-		},
-		"@openzeppelin/contracts/security/ReentrancyGuard.sol": {
-			"keccak256": "0xa535a5df777d44e945dd24aa43a11e44b024140fc340ad0dfe42acf4002aade1",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://41319e7f621f2dc3733511332c4fd032f8e32ad2aa7fd6f665c19741d9941a34",
-				"dweb:/ipfs/QmcYR3bd862GD1Bc7jwrU9bGxrhUu5na1oP964bDCu2id1"
-			]
-		},
-		"@openzeppelin/contracts/utils/Context.sol": {
-			"keccak256": "0x493033a8d1b176a037b2cc6a04dad01a5c157722049bbecf632ca876224dd4b2",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://6a708e8a5bdb1011c2c381c9a5cfd8a9a956d7d0a9dc1bd8bcdaf52f76ef2f12",
-				"dweb:/ipfs/Qmax9WHBnVsZP46ZxEMNRQpLQnrdE4dK8LehML1Py8FowF"
-			]
-		},
-		"platform.sol": {
-			"keccak256": "0xca637fb1b2f65153f872501054fdd54bebe0d2d09037fe5ea1395eff9800d548",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://feaf4ba51ac083048676058eb75c7d5fb08a2d5d25bdde3c7da7d6c2d709b5f0",
-				"dweb:/ipfs/QmTVrnu6PzyZCJy2NA8vo6Ycz3B7PVA2WD7tmB2uoAyDLv"
+				"bzz-raw://3e2bcf75a4af607bb90a422f9ff933020adbaf46b70721f10d31028ff5f74c7e",
+				"dweb:/ipfs/QmSCKksG9im15giAkUcQDydk7gGd9WCNuJwv6JsxBRyjjU"
 			]
 		}
 	},
