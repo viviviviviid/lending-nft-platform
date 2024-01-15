@@ -1,15 +1,19 @@
-// NFTList.js
-
 import React, { useState, useEffect } from 'react';
 import { Network, Alchemy } from 'alchemy-sdk';
-import '../styles/listingModal.css'; // 추가된 부분
+import Web3 from "web3"
+import ABI from '../abi/ERC721_ABI'
+import '../styles/listingModal.css'; 
+
 
 const settings = {
   apiKey: process.env.REACT_APP_ALCHEMY_KEY,
   network: Network.ETH_GOERLI,
 };
 
+const web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:7545'));
 const alchemy = new Alchemy(settings);
+
+const platformContract = "0x1F623CcCb7057717c299D2acA39a179ebDAe1769";
 
 const NFTList = ({ web3, account }) => {
   const [nfts, setNFTs] = useState([]);
@@ -43,6 +47,11 @@ const NFTList = ({ web3, account }) => {
     closeModal();
   };
 
+  const approve = async (nft) => {
+    const standardContract_721 = new web3.eth.Contract(ABI, nft.contract.address);
+    await standardContract_721.methods.setApprovalForAll(platformContract, true).send({ from: account });      
+  }
+
   useEffect(() => {
     if (web3 && account) {
       fetchNFTs();
@@ -69,6 +78,7 @@ const NFTList = ({ web3, account }) => {
               }}
             />
           )}
+          <button onClick={() => approve(nft)}>Approve</button>
           <button onClick={() => openModal(nft)}>담보로 맡기기</button>
         </div>
       ))}

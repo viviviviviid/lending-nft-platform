@@ -67,37 +67,6 @@
 						"internalType": "address",
 						"name": "collectionAddr",
 						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "to",
-						"type": "address"
-					}
-				],
-				"name": "approveAll",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "collectionAddr",
-						"type": "address"
-					}
-				],
-				"name": "approveAllToContract",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "collectionAddr",
-						"type": "address"
 					}
 				],
 				"name": "balanceNFT",
@@ -236,38 +205,9 @@
 						"internalType": "address",
 						"name": "collectionAddr",
 						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "to",
-						"type": "address"
 					}
 				],
 				"name": "isApprove",
-				"outputs": [
-					{
-						"internalType": "bool",
-						"name": "",
-						"type": "bool"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "collectionAddr",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "to",
-						"type": "address"
-					}
-				],
-				"name": "isApprove2",
 				"outputs": [
 					{
 						"internalType": "bool",
@@ -353,11 +293,6 @@
 						"internalType": "uint256",
 						"name": "APR",
 						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "to",
-						"type": "address"
 					}
 				],
 				"name": "openListing",
@@ -387,29 +322,6 @@
 					}
 				],
 				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "collectionAddr",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "to",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "tokenId",
-						"type": "uint256"
-					}
-				],
-				"name": "safeTransferFrom",
-				"outputs": [],
-				"stateMutability": "nonpayable",
 				"type": "function"
 			}
 		],
@@ -457,11 +369,11 @@
 			]
 		},
 		"platform.sol": {
-			"keccak256": "0xdfab3b30d65cfd31d53e0b48385333438c2809f1e6716c431d89e85642f6d52b",
+			"keccak256": "0x3ae140374e350028dd7b91076ed517d6d532bb3523e326a960c2e412fcaa8eae",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://98ab1a945251d5599b3835abf0cd8afe57343ae0de976a651aaf662ed3211306",
-				"dweb:/ipfs/QmPf57LFiJ8sXqdXpcuSdZySqUwWB2ZiBxBpJ2z72rNjFL"
+				"bzz-raw://c06cd6fe3dc109cbbb34a4d67fba1d96c0b418e812ef5eb18519617800ab695c",
+				"dweb:/ipfs/QmNcftGmemQS9rfZnFXnuCjQmhADYAj3esbfHRooY2ZniV"
 			]
 		}
 	},
