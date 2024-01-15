@@ -39,22 +39,47 @@ const NFTList = ({ web3, account }) => {
     setIsModalOpen(false);
   };
 
-  const submitLoanProposal = async (selectedNFT) => {
-    // console.log(selectedNFT)
-    // console.log(typeof(amount), typeof(duration), typeof(APR), typeof(selectedNFT.tokenId));
-    // console.log(amount, duration, APR, selectedNFT.contract.tokenId);
-    const platformContract = new web3.eth.Contract(platformABI, platformHx);
+  const approve = async (standardContract_721) => {
+    await standardContract_721.methods.setApprovalForAll(platformHx, true)
+    .send({ from: account })
+    .then(result => console.log(result))
+    .catch(err => console.error(err))
+  }
+
+  const openListing = async (platformContract) => {
     await platformContract.methods.openListing(
       selectedNFT.contract.address, Number(selectedNFT.tokenId),
-      amount, duration, APR).send({ from: account }
-    )
-    closeModal();
-  };
-
-  const approve = async (nft) => {
-    const standardContract_721 = new web3.eth.Contract(StandardABI, nft.contract.address);
-    await standardContract_721.methods.setApprovalForAll(platformHx, true).send({ from: account });      
+      amount, duration, APR
+    ).send({ from: account })
+    .then(result => console.log(result))
+    .catch(err => console.error(err))
   }
+
+  const submitLoanProposal = async (selectedNFT) => {
+    const standardContract_721 = new web3.eth.Contract(StandardABI, selectedNFT.contract.address);
+    const platformContract = new web3.eth.Contract(platformABI, platformHx);
+    const owner = (await platformContract.methods.ownerOf(selectedNFT.contract.address, Number(selectedNFT.tokenId)).call()).toUpperCase();
+    
+    if(owner !== account.toUpperCase()){
+      console.error("Not holder");
+      closeModal();
+      return;
+    }
+    
+    const isApproved = await platformContract.methods.isApprove(selectedNFT.contract.address).call({ from: account });
+    if(isApproved){
+      await approve(standardContract_721)
+      .then(result => console.log(result))
+      .catch(err => {
+        console.error(err);
+        return;
+      })
+    }
+  
+    await openListing(platformContract);
+    closeModal();
+    // 그 뒤 listing page로 리다이렉트
+  };
 
   useEffect(() => {
     if (web3 && account) {
@@ -82,7 +107,7 @@ const NFTList = ({ web3, account }) => {
               }}
             />
           )}
-          <button onClick={() => approve(nft)}>Approve</button>
+          {/* <button onClick={() => approve(nft)}>Approve</button> */}
           <button onClick={() => openModal(nft)}>담보로 맡기기</button>
         </div>
       ))}
