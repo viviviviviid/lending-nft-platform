@@ -51,7 +51,9 @@ const NFTList = ({ web3, account }) => {
       selectedNFT.contract.address, Number(selectedNFT.tokenId),
       amount, duration, APR
     ).send({ from: account })
-    .then(result => console.log(result))
+    .then(result => {
+      // GO API로 값 전송
+    })
     .catch(err => console.error(err))
   }
 
@@ -78,7 +80,7 @@ const NFTList = ({ web3, account }) => {
   
     await openListing(platformContract);
     closeModal();
-    // 그 뒤 listing page로 리다이렉트
+    window.location.href = 'http://localhost:3000/list';
   };
 
   useEffect(() => {

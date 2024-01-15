@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import Web3 from 'web3';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './styles/App.css';
-import Header from './component/header'; // Header 컴포넌트 추가
-import Mypage from './component/myPage'; // Mypage 컴포넌트 추가
+import Header from './component/header'; 
+import Mypage from './component/myPage'; 
 
 function App() {
   const [account, setAccount] = useState('');
