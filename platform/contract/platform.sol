@@ -45,16 +45,8 @@ contract Platform {
         return counter;
     }
 
-    function balanceNFT(address collectionAddr) public view returns (uint256) {
-        return IERC721(collectionAddr).balanceOf(msg.sender);
-    }
-
     function ownerOf(address collectionAddr, uint256 tokenId) public view returns (address) {
         return IERC721(collectionAddr).ownerOf(tokenId);
-    }
-
-    function cancelApproveAll(address collectionAddr, address to) public {
-        IERC721(collectionAddr).setApprovalForAll(to, false);
     }
 
     function isApprove(address collectionAddr) public view returns (bool) {
@@ -70,7 +62,6 @@ contract Platform {
     ) public {
         require(amount > 0 && duration > 0 && APR > 0, "Values must be greater than zero");
         require(IERC721(collectionAddr).ownerOf(tokenId) == msg.sender, "You are not holder of this token");
-        
         ListingInfo memory info = ListingInfo(msg.sender, collectionAddr, tokenId, amount, duration, APR, "Open");
         listNum[counter] = info;
         addrList[msg.sender].push(counter);

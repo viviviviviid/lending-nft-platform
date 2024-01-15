@@ -62,43 +62,6 @@
 				"type": "event"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "collectionAddr",
-						"type": "address"
-					}
-				],
-				"name": "balanceNFT",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "collectionAddr",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "to",
-						"type": "address"
-					}
-				],
-				"name": "cancelApproveAll",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
 				"inputs": [],
 				"name": "getCounter",
 				"outputs": [
@@ -369,11 +332,11 @@
 			]
 		},
 		"platform.sol": {
-			"keccak256": "0x3ae140374e350028dd7b91076ed517d6d532bb3523e326a960c2e412fcaa8eae",
+			"keccak256": "0x521edb172e94e2777667accacc2e78627fb1dcfa0dcb14997522f60948aed852",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://c06cd6fe3dc109cbbb34a4d67fba1d96c0b418e812ef5eb18519617800ab695c",
-				"dweb:/ipfs/QmNcftGmemQS9rfZnFXnuCjQmhADYAj3esbfHRooY2ZniV"
+				"bzz-raw://6920b4649de679bdd129b2c92904ad100893f2f5e111fe0a28a15e77c2bd34d3",
+				"dweb:/ipfs/QmTGpSr7YmBTy3Xi5WJbrpH4TrT1AQST5EHmei3YYGU6LU"
 			]
 		}
 	},

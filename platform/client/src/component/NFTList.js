@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Network, Alchemy } from 'alchemy-sdk';
-import Web3 from "web3"
-import ABI from '../abi/ERC721_ABI'
+import StandardABI from '../abi/ERC721_ABI';
+import platformABI from '../abi/platform_ABI';
 import '../styles/listingModal.css'; 
-
 
 const settings = {
   apiKey: process.env.REACT_APP_ALCHEMY_KEY,
   network: Network.ETH_GOERLI,
 };
 
-const web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:7545'));
 const alchemy = new Alchemy(settings);
-
-const platformContract = "0x1F623CcCb7057717c299D2acA39a179ebDAe1769";
+const platformHx = "0x6A4383823E40578C29853721Da1cc38e747C1f59";
 
 const NFTList = ({ web3, account }) => {
   const [nfts, setNFTs] = useState([]);
@@ -21,7 +18,7 @@ const NFTList = ({ web3, account }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [amount, setAmount] = useState('');
   const [duration, setDuration] = useState('');
-  const [apr, setApr] = useState('');
+  const [APR, setAPR] = useState('');
 
   const fetchNFTs = async () => {
     try {
@@ -42,14 +39,21 @@ const NFTList = ({ web3, account }) => {
     setIsModalOpen(false);
   };
 
-  const submitLoanProposal = () => {
-    console.log('Loan proposal submitted:', { amount, duration, apr, selectedNFT });
+  const submitLoanProposal = async (selectedNFT) => {
+    // console.log(selectedNFT)
+    // console.log(typeof(amount), typeof(duration), typeof(APR), typeof(selectedNFT.tokenId));
+    // console.log(amount, duration, APR, selectedNFT.contract.tokenId);
+    const platformContract = new web3.eth.Contract(platformABI, platformHx);
+    await platformContract.methods.openListing(
+      selectedNFT.contract.address, Number(selectedNFT.tokenId),
+      amount, duration, APR).send({ from: account }
+    )
     closeModal();
   };
 
   const approve = async (nft) => {
-    const standardContract_721 = new web3.eth.Contract(ABI, nft.contract.address);
-    await standardContract_721.methods.setApprovalForAll(platformContract, true).send({ from: account });      
+    const standardContract_721 = new web3.eth.Contract(StandardABI, nft.contract.address);
+    await standardContract_721.methods.setApprovalForAll(platformHx, true).send({ from: account });      
   }
 
   useEffect(() => {
@@ -93,17 +97,17 @@ const NFTList = ({ web3, account }) => {
             <p>NFT 정보: {selectedNFT.tokenId}</p>
             <label>
               Amount:
-              <input type="text" value={amount} onChange={(e) => setAmount(e.target.value)} />
+              <input type="text" value={amount} onChange={(e) => setAmount(Number(e.target.value))} />
             </label>
             <label>
               Duration:
-              <input type="text" value={duration} onChange={(e) => setDuration(e.target.value)} />
+              <input type="text" value={duration} onChange={(e) => setDuration(Number(e.target.value))} />
             </label>
             <label>
               APR:
-              <input type="text" value={apr} onChange={(e) => setApr(e.target.value)} />
+              <input type="text" value={APR} onChange={(e) => setAPR(Number(e.target.value))} />
             </label>
-            <button onClick={submitLoanProposal}>대출 제안</button>
+            <button onClick={() => submitLoanProposal(selectedNFT)}>대출 제안</button>
           </div>
         </div>
       )}

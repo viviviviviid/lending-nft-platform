@@ -1,4 +1,4 @@
-const ABI = [
+const StandardABI = [
 	{
 		"inputs": [
 			{
@@ -434,7 +434,4 @@ const ABI = [
 	}
 ]
 
-
-
-
-export default ABI;
+export default StandardABI;
