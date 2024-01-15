@@ -49,6 +49,7 @@ contract Platform {
         return IERC721(collectionAddr).ownerOf(tokenId);
     }
 
+
     function isApprove(address collectionAddr) public view returns (bool) {
         return IERC721(collectionAddr).isApprovedForAll(msg.sender, address(this));
     }
@@ -62,6 +63,7 @@ contract Platform {
     ) public {
         require(amount > 0 && duration > 0 && APR > 0, "Values must be greater than zero");
         require(IERC721(collectionAddr).ownerOf(tokenId) == msg.sender, "You are not holder of this token");
+        
         ListingInfo memory info = ListingInfo(msg.sender, collectionAddr, tokenId, amount, duration, APR, "Open");
         listNum[counter] = info;
         addrList[msg.sender].push(counter);
