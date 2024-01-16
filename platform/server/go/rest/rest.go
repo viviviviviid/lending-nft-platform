@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/gorilla/handlers"
 	"github.com/m/go/db"
 	"github.com/m/go/utils"
 )
@@ -58,6 +59,7 @@ func signIn(res http.ResponseWriter, req *http.Request) {
 
 func listing(res http.ResponseWriter, req *http.Request) {
 	body, err := io.ReadAll(req.Body)
+	fmt.Printf("%s\n", body)
 	utils.HandleErr(err)
 	utils.HandleErr(json.Unmarshal(body, &listingData))
 
@@ -78,13 +80,23 @@ func buy(res http.ResponseWriter, req *http.Request) {
 
 func Start() {
 	fmt.Println("REST API")
-	http.HandleFunc("/documentation", documentation)
-	http.HandleFunc("/register", signUp)
-	http.HandleFunc("/login", signIn)
-	http.HandleFunc("/open", listing)
-	http.HandleFunc("/close", delisting)
-	http.HandleFunc("/buy", buy)
-	http.ListenAndServe(":8080", nil)
+
+	router := http.NewServeMux()
+	router.HandleFunc("/documentation", documentation)
+	router.HandleFunc("/register", signUp)
+	router.HandleFunc("/login", signIn)
+	router.HandleFunc("/open", listing)
+	router.HandleFunc("/close", delisting)
+	router.HandleFunc("/buy", buy)
+
+	// CORS 미들웨어 설정
+	corsHandler := handlers.CORS(
+		handlers.AllowedOrigins([]string{"http://localhost:3000"}), // 클라이언트 주소
+		handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}),
+		handlers.AllowedHeaders([]string{"Content-Type", "X-Requested-With", "Authorization"}),
+	)
+
+	http.ListenAndServe(":8080", corsHandler(router))
 }
 
 // API

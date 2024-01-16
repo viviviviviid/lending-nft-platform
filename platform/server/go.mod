@@ -7,6 +7,8 @@ require (
 	github.com/andybalholm/cascadia v1.3.1 // indirect
 	github.com/br0xen/boltbrowser v0.0.0-20230531143731-fcc13603daaf // indirect
 	github.com/br0xen/termbox-util v0.0.0-20170904143325-de1d4c83380e // indirect
+	github.com/felixge/httpsnoop v1.0.4 // indirect
+	github.com/gorilla/handlers v1.5.2 // indirect
 	github.com/labstack/echo v3.3.10+incompatible // indirect
 	github.com/labstack/echo/v4 v4.10.2 // indirect
 	github.com/labstack/gommon v0.4.0 // indirect

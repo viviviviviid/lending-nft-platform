@@ -43,6 +43,6 @@ func SignIn(addr string) {
 }
 
 func OpenListing(data ListingData) error {
-	_, err := db.Exec("INSERT INTO users(owner, collection, tokenId, image, amount, duration, APR, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", data.Owner, data.Collection, data.TokenId, data.ImageUrl, data.Amount, data.Duration, data.APR, "open")
+	_, err := db.Exec(`INSERT INTO list(owner, collection, "tokenId", image, amount, duration, "APR", status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`, data.Owner, data.Collection, data.TokenId, data.ImageUrl, data.Amount, data.Duration, data.APR, "open")
 	return err
 }

@@ -51,10 +51,27 @@ const NFTList = ({ web3, account }) => {
       selectedNFT.contract.address, Number(selectedNFT.tokenId),
       amount, duration, APR
     ).send({ from: account })
-    .then(result => {
-      // GO API로 값 전송
-    })
-    .catch(err => console.error(err))
+    
+    const data = {
+      Owner: account,
+      Collection: selectedNFT.contract.address,
+      TokenId: Number(selectedNFT.tokenId),
+      ImageUrl: selectedNFT.image.originalUrl,
+      Amount: amount,
+      Duration: duration,
+      APR: APR
+    };
+
+    const response = await fetch('http://localhost:8080/open', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    
+    const responseData = await response.json();
+    console.log('Success:', responseData);
   }
 
   const submitLoanProposal = async (selectedNFT) => {
@@ -69,7 +86,7 @@ const NFTList = ({ web3, account }) => {
     }
     
     const isApproved = await platformContract.methods.isApprove(selectedNFT.contract.address).call({ from: account });
-    if(isApproved){
+    if(!isApproved){
       await approve(standardContract_721)
       .then(result => console.log(result))
       .catch(err => {
@@ -79,6 +96,7 @@ const NFTList = ({ web3, account }) => {
     }
   
     await openListing(platformContract);
+
     closeModal();
     window.location.href = 'http://localhost:3000/list';
   };
