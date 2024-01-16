@@ -57,7 +57,21 @@ func signIn(res http.ResponseWriter, req *http.Request) {
 }
 
 func getList(res http.ResponseWriter, req *http.Request) {
-	db.GetList()
+	list, err := db.GetList()
+	if err != nil {
+		utils.HandleErr(err)
+		return
+	}
+
+	jsonData, err := json.Marshal(list)
+	if err != nil {
+		utils.HandleErr(err)
+		return
+	}
+
+	res.Header().Set("Content-Type", "application/json")
+	res.WriteHeader(http.StatusOK)
+	res.Write(jsonData)
 }
 
 func listing(res http.ResponseWriter, req *http.Request) {

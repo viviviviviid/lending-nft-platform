@@ -59,12 +59,14 @@ func OpenListing(data ListingData) error {
 	return err
 }
 
-func GetList() {
+func GetList() ([]ListingData_Status, error) {
 	rows, err := db.Query("SELECT * FROM public.list ORDER BY id ASC")
 	if err != nil {
 		utils.HandleErr(err)
 	}
 	defer rows.Close()
+
+	var list []ListingData_Status
 
 	for rows.Next() {
 		var data ListingData_Status
@@ -72,10 +74,8 @@ func GetList() {
 		if err != nil {
 			panic(err)
 		}
-
-		// 조회된 데이터 출력 (예시)
-		fmt.Printf("%+v\n", data)
+		list = append(list, data)
 	}
 
-	// return result, err
+	return list, err
 }
