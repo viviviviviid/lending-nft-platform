@@ -18,7 +18,10 @@ const (
 	ErrExist = "pq: duplicate key value violates unique constraint \"users_unique\""
 )
 
-var u = User{}
+var (
+	u           = User{}
+	listingData = db.ListingData{}
+)
 
 func documentation(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
@@ -56,9 +59,15 @@ func signIn(res http.ResponseWriter, req *http.Request) {
 func listing(res http.ResponseWriter, req *http.Request) {
 	body, err := io.ReadAll(req.Body)
 	utils.HandleErr(err)
-	utils.HandleErr(json.Unmarshal(body, &u))
+	utils.HandleErr(json.Unmarshal(body, &listingData))
 
-	ListingInfo
+	err = db.OpenListing(listingData)
+	if err != nil {
+		utils.HandleErr(err)
+		res.WriteHeader(http.StatusBadRequest) // 400 Bad Request
+		res.Write([]byte(err.Error()))
+	}
+	res.WriteHeader(http.StatusCreated) // 201 Created
 }
 
 func delisting(res http.ResponseWriter, req *http.Request) {
@@ -72,8 +81,8 @@ func Start() {
 	http.HandleFunc("/documentation", documentation)
 	http.HandleFunc("/register", signUp)
 	http.HandleFunc("/login", signIn)
-	http.HandleFunc("/listing", listing)
-	http.HandleFunc("/delisting", delisting)
+	http.HandleFunc("/open", listing)
+	http.HandleFunc("/close", delisting)
 	http.HandleFunc("/buy", buy)
 	http.ListenAndServe(":8080", nil)
 }

@@ -8,6 +8,16 @@ import (
 	"github.com/m/go/utils"
 )
 
+type ListingData struct {
+	Owner      string
+	Collection string
+	TokenId    int
+	ImageUrl   string
+	Amount     int
+	Duration   int
+	APR        int32
+}
+
 var db *sql.DB
 
 func InitDB() {
@@ -30,4 +40,9 @@ func SignUp(addr string) (string, error) {
 
 func SignIn(addr string) {
 
+}
+
+func OpenListing(data ListingData) error {
+	_, err := db.Exec("INSERT INTO users(owner, collection, tokenId, image, amount, duration, APR, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", data.Owner, data.Collection, data.TokenId, data.ImageUrl, data.Amount, data.Duration, data.APR, "open")
+	return err
 }
