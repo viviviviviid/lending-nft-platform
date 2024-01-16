@@ -49,17 +49,22 @@ func signUp(res http.ResponseWriter, req *http.Request) {
 
 }
 
-func signIn(rw http.ResponseWriter, r *http.Request) {
+func signIn(res http.ResponseWriter, req *http.Request) {
 	// db.SignIn(address)
 }
 
-func listing(rw http.ResponseWriter, r *http.Request) {
+func listing(res http.ResponseWriter, req *http.Request) {
+	body, err := io.ReadAll(req.Body)
+	utils.HandleErr(err)
+	utils.HandleErr(json.Unmarshal(body, &u))
+
+	ListingInfo
 }
 
-func delisting(rw http.ResponseWriter, r *http.Request) {
+func delisting(res http.ResponseWriter, req *http.Request) {
 }
 
-func buy(rw http.ResponseWriter, r *http.Request) {
+func buy(res http.ResponseWriter, req *http.Request) {
 }
 
 func Start() {
