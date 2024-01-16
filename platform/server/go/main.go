@@ -11,4 +11,5 @@ func main() {
 	fmt.Println("Start")
 	db.InitDB()
 	rest.Start()
-}
+} 
+   

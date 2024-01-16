@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Web3 from 'web3';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './styles/App.css';
+import Listing from './component/listing';
 import Header from './component/header'; 
 import Mypage from './component/myPage'; 
 
@@ -41,6 +42,8 @@ function App() {
         <div className="userInfo">주소: {account}</div>
         <Routes>
           <Route path="/mypage" element={<Mypage web3={web3} account={account} />} />
+          <Route path="/list" element={<Listing web3={web3} account={account} />} />
+
           {/* 다른 라우트들 추가 */}
         </Routes>
       </div>

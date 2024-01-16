@@ -50,11 +50,14 @@ func signUp(res http.ResponseWriter, req *http.Request) {
 		res.WriteHeader(http.StatusCreated) // 201 Created
 		res.Write([]byte(result))
 	}
-
 }
 
 func signIn(res http.ResponseWriter, req *http.Request) {
 	// db.SignIn(address)
+}
+
+func getList(res http.ResponseWriter, req *http.Request) {
+	db.GetList()
 }
 
 func listing(res http.ResponseWriter, req *http.Request) {
@@ -85,6 +88,7 @@ func Start() {
 	router.HandleFunc("/documentation", documentation)
 	router.HandleFunc("/register", signUp)
 	router.HandleFunc("/login", signIn)
+	router.HandleFunc("/list", getList)
 	router.HandleFunc("/open", listing)
 	router.HandleFunc("/close", delisting)
 	router.HandleFunc("/buy", buy)
