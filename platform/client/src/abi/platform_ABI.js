@@ -56,6 +56,19 @@ const platformABI = [
 		"type": "event"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "listingIndex",
+				"type": "uint256"
+			}
+		],
+		"name": "closeListig",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"name": "getCounter",
 		"outputs": [

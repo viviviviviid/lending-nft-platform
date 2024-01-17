@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.20+commit.a1b79de6"
+		"version": "0.8.23+commit.f704f362"
 	},
 	"language": "Solidity",
 	"output": {
@@ -60,6 +60,19 @@
 				],
 				"name": "NewListing",
 				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "listingIndex",
+						"type": "uint256"
+					}
+				],
+				"name": "closeListig",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
 			},
 			{
 				"inputs": [],
@@ -332,11 +345,11 @@
 			]
 		},
 		"platform.sol": {
-			"keccak256": "0x7e7472d6110de3e81379922e82ab99987cda0978dbcf7dc862efc0d0be447c28",
+			"keccak256": "0x3214a7db75664a65b78b867608a578b523e0a25b7ca00d29f7b01bfe435e6fc0",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://c8ffea3756e441a780289abcc85a2d1afa5725e4540e2270b19a8cf62fa5b919",
-				"dweb:/ipfs/QmWn2uMUVgEC4WX9s9jBksQM4hAzm2w84CjyBPAJwwhnRw"
+				"bzz-raw://e5983857d447dd2d53a87f0e09aaee0c9f9f0f00d2a05c9e5afeff05f22046eb",
+				"dweb:/ipfs/QmXkzbPFkuU392vcfMuSd7dA2rPWUCSRQbn4UtQangyH7D"
 			]
 		}
 	},

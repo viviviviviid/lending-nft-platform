@@ -10,7 +10,7 @@ const settings = {
 };
 
 const alchemy = new Alchemy(settings);
-const platformHx = "0x6A4383823E40578C29853721Da1cc38e747C1f59";
+const platformHx = "0x6e554c12629478D3a67dd564BF1D4E5f418514BC";
 
 const NFTList = ({ web3, account }) => {
   const [nfts, setNFTs] = useState([]);
