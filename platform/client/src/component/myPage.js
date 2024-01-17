@@ -8,8 +8,6 @@ import '../styles/myPage.css'
 // 불러오면 화면에 뿌려주고, 취소버튼 만들어두기
 // 취소버튼 누르면 만들어둔 컨트랙트 함수 호출하고, 컨펌되면 delisting API 쏴서 close로 변경되도록.
 
-
-
 const Mypage = ({ web3, account }) => {
   return (
     <div className="mypage-container">

@@ -3,13 +3,14 @@ package db
 import (
 	"database/sql"
 	"fmt"
+	"strings"
 
 	_ "github.com/lib/pq"
 	"github.com/m/go/utils"
 )
 
 type ListingData struct {
-	Owner      string
+	Poster     string
 	Collection string
 	TokenId    int
 	ImageUrl   string
@@ -20,7 +21,7 @@ type ListingData struct {
 
 type ListingData_Status struct {
 	id         int
-	Owner      string
+	Poster     string
 	Collection string
 	TokenId    int
 	ImageUrl   string
@@ -58,23 +59,25 @@ func SignIn(addr string) {
 }
 
 func OpenListing(data ListingData) error {
-	_, err := db.Exec(`INSERT INTO list(owner, collection, "tokenId", image, amount, duration, "APR", status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`, data.Owner, data.Collection, data.TokenId, data.ImageUrl, data.Amount, data.Duration, data.APR, "open")
+	_, err := db.Exec(`INSERT INTO list(poster, collection, "tokenId", image, amount, duration, "APR", status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`, data.Poster, data.Collection, data.TokenId, data.ImageUrl, data.Amount, data.Duration, data.APR, "open")
 	return err
 }
 
 func GetList(address string) ([]ListingData_Status, error) {
+	lowercaseAddress := strings.ToLower(address)
 	if address == "" {
 		rows, err = db.Query("SELECT * FROM public.list WHERE status = 'open' ORDER BY id ASC")
 	} else {
-		rows, err = db.Query("SELECT * FROM public.list WHERE status = 'open' AND owner = $1 ORDER BY id ASC", address)
+		rows, err = db.Query(`SELECT * FROM list WHERE status = 'open' AND poster = $1 ORDER BY id ASC`, lowercaseAddress)
 	}
+
 	utils.HandleErr(err)
 	defer rows.Close()
 
 	var list []ListingData_Status
 	for rows.Next() {
 		var data ListingData_Status
-		err := rows.Scan(&data.id, &data.Owner, &data.Collection, &data.TokenId, &data.ImageUrl, &data.Amount, &data.Duration, &data.APR, &data.Status)
+		err := rows.Scan(&data.id, &data.Poster, &data.Collection, &data.TokenId, &data.ImageUrl, &data.Amount, &data.Duration, &data.APR, &data.Status)
 		if err != nil {
 			return nil, err
 		}
@@ -84,6 +87,6 @@ func GetList(address string) ([]ListingData_Status, error) {
 }
 
 // func CloseListing(listingIndex int) error {
-// 	// _, err := db.Exec(`INSERT INTO list(owner, collection, "tokenId", image, amount, duration, "APR", status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`, data.Owner, data.Collection, data.TokenId, data.ImageUrl, data.Amount, data.Duration, data.APR, "open")
+// 	// _, err := db.Exec(`INSERT INTO list(poster, collection, "tokenId", image, amount, duration, "APR", status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`, data.Poster, data.Collection, data.TokenId, data.ImageUrl, data.Amount, data.Duration, data.APR, "open")
 // 	// return err
 // }

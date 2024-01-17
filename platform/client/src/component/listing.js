@@ -16,7 +16,7 @@ const Listing = () => {
       <h1>오픈된 담보 리스트</h1>
       {listings.map((listing, index) => (
         <div key={index}>
-          <p>Owner: {listing.Owner}</p>
+          <p>Poster: {listing.Poster}</p>
           <p>Collection: {listing.Collection}</p>
           <p>TokenId: {listing.TokenId}</p>
           <p>Amount: {listing.Amount}</p>

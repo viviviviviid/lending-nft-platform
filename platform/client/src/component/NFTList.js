@@ -53,7 +53,7 @@ const NFTList = ({ web3, account }) => {
     ).send({ from: account })
     
     const data = {
-      Owner: account,
+      Poster: account,
       Collection: selectedNFT.contract.address,
       TokenId: Number(selectedNFT.tokenId),
       ImageUrl: selectedNFT.image.originalUrl,
@@ -73,6 +73,13 @@ const NFTList = ({ web3, account }) => {
     const responseData = await response.json();
     console.log('Success:', responseData);
   }
+
+  const closeListing = async (platformContract) => {
+
+    await platformContract.methods.closeListing(listingIndex).send({ from: account }) 
+  }
+
+  // closeListig(uint256 listingIndex)
 
   const submitLoanProposal = async (selectedNFT) => {
     const standardContract_721 = new web3.eth.Contract(StandardABI, selectedNFT.contract.address);
