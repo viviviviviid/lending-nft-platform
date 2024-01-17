@@ -5,6 +5,7 @@ import './styles/App.css';
 import Listing from './component/listing';
 import Header from './component/header'; 
 import Mypage from './component/myPage'; 
+import MyListing from './component/myListing';
 
 function App() {
   const [account, setAccount] = useState('');
@@ -43,8 +44,7 @@ function App() {
         <Routes>
           <Route path="/mypage" element={<Mypage web3={web3} account={account} />} />
           <Route path="/list" element={<Listing web3={web3} account={account} />} />
-
-          {/* 다른 라우트들 추가 */}
+          <Route path="/myListing" element={<MyListing web3={web3} account={account} />} />
         </Routes>
       </div>
     </Router>

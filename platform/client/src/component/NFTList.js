@@ -69,15 +69,12 @@ const NFTList = ({ web3, account }) => {
       },
       body: JSON.stringify(data),
     });
-    
-    const responseData = await response.json();
-    console.log('Success:', responseData);
   }
 
-  const closeListing = async (platformContract) => {
+  // const closeListing = async (platformContract) => {
 
-    await platformContract.methods.closeListing(listingIndex).send({ from: account }) 
-  }
+  //   await platformContract.methods.closeListing(listingIndex).send({ from: account }) 
+  // }
 
   // closeListig(uint256 listingIndex)
 
@@ -118,7 +115,7 @@ const NFTList = ({ web3, account }) => {
     <div>
       <h1>NFT 목록</h1>
       {nfts.map((nft) => (
-        <div key={nft.tokenId} style={{ border: '1px solid black', padding: '10px', margin: '10px' }}>
+         <div key={nft.tokenId} className="nft-item">
           <h3>컬렉션 이름: {nft.contract.openSeaMetadata.collectionName}</h3>
           <p>토큰 이름: {nft.contract.name}</p>
           <p>토큰 ID: {nft.tokenId}</p>

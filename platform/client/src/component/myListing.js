@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const Listing = ({ web3, account }) => {
+const MyListing = ({ web3, account }) => {
   const [listings, setListings] = useState([]);
 
   useEffect(() => {
@@ -13,7 +13,7 @@ const Listing = ({ web3, account }) => {
 
   return (
     <div>
-      <h1>오픈된 담보 리스트</h1>
+      <h1>내가 상장한 리스트</h1>
       {listings && listings.map((listing, index) => (
         <div key={index}>
           <p>Poster: {listing.Poster}</p>
@@ -40,7 +40,7 @@ const Listing = ({ web3, account }) => {
 
 async function fetchListings(account) {
   try {
-    const response = await fetch('http://localhost:8080/list/' + account + "?all=true");
+    const response = await fetch('http://localhost:8080/list/' + account);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -52,4 +52,4 @@ async function fetchListings(account) {
   }
 }
 
-export default Listing;
+export default MyListing;
