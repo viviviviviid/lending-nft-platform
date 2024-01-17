@@ -30,7 +30,11 @@ type ListingData_Status struct {
 	Status     string
 }
 
-var db *sql.DB
+var (
+	db   *sql.DB
+	rows *sql.Rows
+	err  error
+)
 
 func InitDB() {
 	var err error
@@ -43,7 +47,6 @@ func InitDB() {
 
 func SignUp(addr string) (string, error) {
 	_, err := db.Exec("INSERT INTO users(address) VALUES($1)", addr)
-
 	if err != nil {
 		return "", err
 	}
@@ -59,23 +62,28 @@ func OpenListing(data ListingData) error {
 	return err
 }
 
-func GetList() ([]ListingData_Status, error) {
-	rows, err := db.Query("SELECT * FROM public.list ORDER BY id ASC")
-	if err != nil {
-		utils.HandleErr(err)
+func GetList(address string) ([]ListingData_Status, error) {
+	if address == "" {
+		rows, err = db.Query("SELECT * FROM public.list WHERE status = 'open' ORDER BY id ASC")
+	} else {
+		rows, err = db.Query("SELECT * FROM public.list WHERE status = 'open' AND owner = $1 ORDER BY id ASC", address)
 	}
+	utils.HandleErr(err)
 	defer rows.Close()
 
 	var list []ListingData_Status
-
 	for rows.Next() {
 		var data ListingData_Status
 		err := rows.Scan(&data.id, &data.Owner, &data.Collection, &data.TokenId, &data.ImageUrl, &data.Amount, &data.Duration, &data.APR, &data.Status)
 		if err != nil {
-			panic(err)
+			return nil, err
 		}
 		list = append(list, data)
 	}
-
 	return list, err
 }
+
+// func CloseListing(listingIndex int) error {
+// 	// _, err := db.Exec(`INSERT INTO list(owner, collection, "tokenId", image, amount, duration, "APR", status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`, data.Owner, data.Collection, data.TokenId, data.ImageUrl, data.Amount, data.Duration, data.APR, "open")
+// 	// return err
+// }

@@ -70,8 +70,8 @@ contract Platform {
     }
     
     function closeListig(uint256 listingIndex) public {
-        require(listNum[listingIndex].poster == msg.sender, "You are not poster");
-        listNum[listingIndex].status = "canceled";
+        require(listNum[listingIndex].poster == msg.sender, "You are not poster of the list");
+        listNum[listingIndex].status = "cancel";
     }
    
 }

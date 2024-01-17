@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/handlers"
+	"github.com/gorilla/mux"
 	"github.com/m/go/db"
 	"github.com/m/go/utils"
 )
@@ -57,17 +58,23 @@ func signIn(res http.ResponseWriter, req *http.Request) {
 }
 
 func getList(res http.ResponseWriter, req *http.Request) {
-	list, err := db.GetList()
-	if err != nil {
-		utils.HandleErr(err)
-		return
+	var (
+		list []db.ListingData_Status
+		err  error
+	)
+
+	vars := mux.Vars(req)
+	address := vars["address"]
+	all := req.URL.Query().Get("all")
+	if all == "true" {
+		list, err = db.GetList("")
+	} else {
+		list, err = db.GetList(address)
 	}
+	utils.HandleErr(err)
 
 	jsonData, err := json.Marshal(list)
-	if err != nil {
-		utils.HandleErr(err)
-		return
-	}
+	utils.HandleErr(err)
 
 	res.Header().Set("Content-Type", "application/json")
 	res.WriteHeader(http.StatusOK)
@@ -98,14 +105,14 @@ func buy(res http.ResponseWriter, req *http.Request) {
 func Start() {
 	fmt.Println("REST API")
 
-	router := http.NewServeMux()
+	router := mux.NewRouter()
 	router.HandleFunc("/documentation", documentation)
-	router.HandleFunc("/register", signUp)
-	router.HandleFunc("/login", signIn)
-	router.HandleFunc("/list", getList)
-	router.HandleFunc("/open", listing)
-	router.HandleFunc("/close", delisting)
-	router.HandleFunc("/buy", buy)
+	router.HandleFunc("/register", signUp).Methods("POST")
+	router.HandleFunc("/login", signIn).Methods("POST")
+	router.HandleFunc("/list/{address}", getList).Methods("GET")
+	router.HandleFunc("/open", listing).Methods("POST")
+	router.HandleFunc("/close", delisting).Methods("POST")
+	router.HandleFunc("/buy", buy).Methods("POST")
 
 	// CORS 미들웨어 설정
 	corsHandler := handlers.CORS(
