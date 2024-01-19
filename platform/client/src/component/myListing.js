@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import platformABI from '../abi/platform_ABI';
+
+const platformHx = process.env.REACT_APP_NFT_CONTRACT_ADDRESS;
 
 const MyListing = ({ web3, account }) => {
   const [listings, setListings] = useState([]);
@@ -10,6 +13,14 @@ const MyListing = ({ web3, account }) => {
     }
     loadData();
   }, []);
+
+  const closeListing = async (selectedNFT) => {
+    console.log(selectedNFT);
+    const platformContract = new web3.eth.Contract(platformABI, platformHx);
+    console.log(platformContract);
+    await platformContract.methods.closeListig(selectedNFT.ID).send({ from: account });
+ 
+  };
 
   return (
     <div>
@@ -28,10 +39,11 @@ const MyListing = ({ web3, account }) => {
               alt={`NFT Image for ${listing.TokenId}`}
               style={{ maxWidth: '200px' }}
               onError={(e) => {
-                e.target.src = 'fallback-image-url'; // 이미지 로드 실패 시 대체 이미지 URL
+                e.target.src = 'fallback-image-url';
               }}
             />
           )}
+          <button onClick={() => closeListing(listing)}>상장 취소</button>
         </div>
       ))}
     </div>

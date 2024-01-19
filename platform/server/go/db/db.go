@@ -20,7 +20,7 @@ type ListingData struct {
 }
 
 type ListingData_Status struct {
-	id         int
+	ID         int
 	Poster     string
 	Collection string
 	TokenId    int
@@ -29,6 +29,10 @@ type ListingData_Status struct {
 	Duration   int
 	APR        int32
 	Status     string
+}
+
+type DelistingID struct {
+	ID int
 }
 
 var (
@@ -77,7 +81,7 @@ func GetList(address string) ([]ListingData_Status, error) {
 	var list []ListingData_Status
 	for rows.Next() {
 		var data ListingData_Status
-		err := rows.Scan(&data.id, &data.Poster, &data.Collection, &data.TokenId, &data.ImageUrl, &data.Amount, &data.Duration, &data.APR, &data.Status)
+		err := rows.Scan(&data.ID, &data.Poster, &data.Collection, &data.TokenId, &data.ImageUrl, &data.Amount, &data.Duration, &data.APR, &data.Status)
 		if err != nil {
 			return nil, err
 		}
@@ -86,7 +90,11 @@ func GetList(address string) ([]ListingData_Status, error) {
 	return list, err
 }
 
-// func CloseListing(listingIndex int) error {
-// 	// _, err := db.Exec(`INSERT INTO list(poster, collection, "tokenId", image, amount, duration, "APR", status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`, data.Poster, data.Collection, data.TokenId, data.ImageUrl, data.Amount, data.Duration, data.APR, "open")
-// 	// return err
-// }
+func CloseListing(idx DelistingID) error {
+	fmt.Println("listingIndex: ", idx.ID)
+	result, err := db.Exec(`UPDATE list SET status = 'close' WHERE id = $1`, idx.ID)
+	utils.HandleErr(err)
+	affecteRow, err := result.RowsAffected()
+	fmt.Println("affecteRow: ", affecteRow)
+	return err
+}

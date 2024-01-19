@@ -97,9 +97,27 @@ func listing(res http.ResponseWriter, req *http.Request) {
 }
 
 func delisting(res http.ResponseWriter, req *http.Request) {
+	body, err := io.ReadAll(req.Body)
+	utils.HandleErr(err)
+
+	var delistingID db.DelistingID
+	err = json.Unmarshal(body, &delistingID)
+	utils.HandleErr(err)
+	fmt.Println(delistingID.ID)
+
+	err = db.CloseListing(delistingID)
+	if err != nil {
+		utils.HandleErr(err)
+		res.WriteHeader(http.StatusBadRequest) // 400 Bad Request
+		res.Write([]byte(err.Error()))
+	}
+	res.WriteHeader(http.StatusOK)
 }
 
 func buy(res http.ResponseWriter, req *http.Request) {
+}
+
+func close(res http.ResponseWriter, req *http.Request) {
 }
 
 func Start() {
@@ -111,8 +129,9 @@ func Start() {
 	router.HandleFunc("/login", signIn).Methods("POST")
 	router.HandleFunc("/list/{address}", getList).Methods("GET")
 	router.HandleFunc("/open", listing).Methods("POST")
-	router.HandleFunc("/close", delisting).Methods("POST")
+	router.HandleFunc("/cancel", delisting).Methods("POST")
 	router.HandleFunc("/buy", buy).Methods("POST")
+	router.HandleFunc("/close", close).Methods("POST")
 
 	// CORS 미들웨어 설정
 	corsHandler := handlers.CORS(

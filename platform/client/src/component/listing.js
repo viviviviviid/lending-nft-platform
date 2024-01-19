@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
+
 const Listing = ({ web3, account }) => {
   const [listings, setListings] = useState([]);
 
