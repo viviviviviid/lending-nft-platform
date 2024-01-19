@@ -114,6 +114,62 @@
 						"type": "tuple"
 					}
 				],
+				"name": "CancelListing",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					},
+					{
+						"components": [
+							{
+								"internalType": "address payable",
+								"name": "poster",
+								"type": "address"
+							},
+							{
+								"internalType": "address",
+								"name": "collectionAddr",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "tokenId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "amount",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "duration",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "APR",
+								"type": "uint256"
+							},
+							{
+								"internalType": "bytes32",
+								"name": "status",
+								"type": "bytes32"
+							}
+						],
+						"indexed": false,
+						"internalType": "struct Platform.ListingInfo",
+						"name": "info",
+						"type": "tuple"
+					}
+				],
 				"name": "NewListing",
 				"type": "event"
 			},
@@ -438,11 +494,11 @@
 			]
 		},
 		"platform.sol": {
-			"keccak256": "0x5be91260215791d59a22b9f0604d62a89df21ee50d6c02ba2fe7c1bf4d90f3d5",
+			"keccak256": "0x0aed5414e06282e3631e80a5ee212ca23fc77e61f86738745e7906380b382d4b",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://c3024ac45b980585b364d75c56fa0102cffd6fa56cd34b6a26db90a6dd499d8b",
-				"dweb:/ipfs/QmWhiwXguvohYWSTeHwxoKyzztNeLUpWxJoXP7cvd3KUKL"
+				"bzz-raw://e528401038d90670429874f5309ac2398c8aed276e33241bb8e76a8f0961ddb7",
+				"dweb:/ipfs/QmWxHZ2tpkG9C9GvHMr2iVy4Va7mBRtyAATtxWR2SvavGM"
 			]
 		}
 	},

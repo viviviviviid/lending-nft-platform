@@ -8,7 +8,7 @@ contract Platform {
     // constructor(address initialOwner) Ownable(initialOwner) {}
 
     event NewListing(address owner, ListingInfo info);
-    // event CancelListing();
+    event CancelListing(address owner, ListingInfo info);
     event ApprovalListing(address loaner, ListingInfo info);
     
     struct ListingInfo {
@@ -49,7 +49,6 @@ contract Platform {
         return IERC721(collectionAddr).isApprovedForAll(msg.sender, address(this));
     }
 
-
     function openListing(
         address collectionAddr,
         uint256 tokenId,
@@ -69,10 +68,12 @@ contract Platform {
     }
     
     function closeListing(uint256 listingIndex) public {
-        require(listNum[listingIndex].poster == msg.sender, "You are not poster of the list");
-        listNum[listingIndex].status = "cancel";
+        ListingInfo memory info = getListingInfo(listingIndex);
+        require(info.poster == msg.sender, "You are not poster of the list");
+        require(info.status == bytes32("open"), "Not opening list"); // 새로 추가된 제약 -> 에러 확인 못했음
+        info.status = "cancel";
         updateTime(listingIndex);
-        //  emit CancelListing();
+        emit CancelListing(msg.sender, info);
     }
 
     function updateTime(uint256 listingIndex) public {
@@ -80,8 +81,9 @@ contract Platform {
     }
 
     function isExpired(uint256 listingIndex) public view returns (uint256, bool) {
-        // require(getListingInfo(listingIndex).status == bytes32("excuting"), "Not excuted list"); // 테스트 끝나면 주석 해제. 현재는 대출승인이 안된 상태에서도 사용가능하게끔 되어있음
-        uint256 expirationTime = updatedTime[listingIndex] + getListingInfo(listingIndex).duration * minTosec; // 테스트용으로 분 단위
+        ListingInfo memory info = getListingInfo(listingIndex);
+        // require(info.status == bytes32("excuting"), "Not excuted list"); // 테스트 끝나면 주석 해제. 현재는 대출승인이 안된 상태에서도 사용가능하게끔 되어있음
+        uint256 expirationTime = updatedTime[listingIndex] + info.duration * minTosec; // 테스트용으로 분 단위
         uint256 remainingTime = expirationTime - block.timestamp;
         return (remainingTime, remainingTime < 0);
     }
@@ -90,10 +92,12 @@ contract Platform {
         ListingInfo memory info = getListingInfo(listingIndex);
         require(msg.sender.balance > info.amount, "You haven't enough balance for lending"); // amount 만큼의 비용이 있는지
         (info.poster).transfer(info.amount);
-        listNum[listingIndex].status = "excuting";
+        info.status = "excuting";
         updateTime(listingIndex);
         emit ApprovalListing(msg.sender, info);
     }
+
+
    
 }
 
