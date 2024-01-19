@@ -15,10 +15,20 @@ const MyListing = ({ web3, account }) => {
   }, []);
 
   const closeListing = async (selectedNFT) => {
-    console.log(selectedNFT);
     const platformContract = new web3.eth.Contract(platformABI, platformHx);
-    console.log(platformContract);
-    await platformContract.methods.closeListig(selectedNFT.ID).send({ from: account });
+    await platformContract.methods.closeListing(selectedNFT.ID).send({ from: account });
+
+    const data = {
+      id: selectedNFT.ID
+    }
+
+    const response = await fetch('http://localhost:8080/cancel', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
  
   };
 

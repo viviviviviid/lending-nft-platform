@@ -1,5 +1,18 @@
 const platformABI = [
 	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "listingIndex",
+				"type": "uint256"
+			}
+		],
+		"name": "closeListig",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"anonymous": false,
 		"inputs": [
 			{
@@ -58,12 +71,32 @@ const platformABI = [
 	{
 		"inputs": [
 			{
+				"internalType": "address",
+				"name": "collectionAddr",
+				"type": "address"
+			},
+			{
 				"internalType": "uint256",
-				"name": "listingIndex",
+				"name": "tokenId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "duration",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "APR",
 				"type": "uint256"
 			}
 		],
-		"name": "closeListig",
+		"name": "openListing",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -235,39 +268,6 @@ const platformABI = [
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "collectionAddr",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "duration",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "APR",
-				"type": "uint256"
-			}
-		],
-		"name": "openListing",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{

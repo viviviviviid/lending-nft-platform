@@ -8,9 +8,11 @@ contract Platform {
     // constructor(address initialOwner) Ownable(initialOwner) {}
 
     event NewListing(address owner, ListingInfo info);
+    // event CancelListing();
+    event ApprovalListing(address loaner, ListingInfo info);
     
     struct ListingInfo {
-        address poster;
+        address payable poster;
         address collectionAddr;
         uint256 tokenId;
         uint256 amount;
@@ -21,19 +23,14 @@ contract Platform {
 
     mapping(uint256 => ListingInfo) public listNum;
     mapping(address => uint256[]) addrList;
+    mapping(uint256 => uint256) updatedTime;
 
     uint256 counter;
-
+    uint256 monthToSec = 2592000;
+    uint256 minTosec = 60;
+    
     function getListing(address addr) public view returns (uint256[] memory) {
         return addrList[addr];
-    }
-
-    function getMyListing() public view returns (uint256[] memory) {
-        // uint256 []idx = addrList[msg.sender];
-        // for(uint i=0; i<length(idx); i++) {
-
-        // }
-        return addrList[msg.sender];
     }
 
     function getListingInfo(uint256 num) public view returns (ListingInfo memory) {
@@ -52,6 +49,7 @@ contract Platform {
         return IERC721(collectionAddr).isApprovedForAll(msg.sender, address(this));
     }
 
+
     function openListing(
         address collectionAddr,
         uint256 tokenId,
@@ -61,17 +59,40 @@ contract Platform {
     ) public {
         require(amount > 0 && duration > 0 && APR > 0, "Values must be greater than zero");
         require(IERC721(collectionAddr).ownerOf(tokenId) == msg.sender, "You are not holder of this token");
-        ListingInfo memory info = ListingInfo(msg.sender, collectionAddr, tokenId, amount, duration, APR, "open");
+        ListingInfo memory info = ListingInfo(payable(msg.sender), collectionAddr, tokenId, amount, duration, APR, "open");
         listNum[counter] = info;
         addrList[msg.sender].push(counter);
-        ++counter;
         IERC721(collectionAddr).transferFrom(msg.sender, address(this), tokenId);
+        updateTime(counter);
+        counter++;
         emit NewListing(msg.sender, info);
     }
     
-    function closeListig(uint256 listingIndex) public {
+    function closeListing(uint256 listingIndex) public {
         require(listNum[listingIndex].poster == msg.sender, "You are not poster of the list");
         listNum[listingIndex].status = "cancel";
+        updateTime(listingIndex);
+        //  emit CancelListing();
+    }
+
+    function updateTime(uint256 listingIndex) public {
+        updatedTime[listingIndex] = block.timestamp;
+    }
+
+    function isExpired(uint256 listingIndex) public view returns (uint256, bool) {
+        // require(getListingInfo(listingIndex).status == bytes32("excuting"), "Not excuted list"); // 테스트 끝나면 주석 해제. 현재는 대출승인이 안된 상태에서도 사용가능하게끔 되어있음
+        uint256 expirationTime = updatedTime[listingIndex] + getListingInfo(listingIndex).duration * minTosec; // 테스트용으로 분 단위
+        uint256 remainingTime = expirationTime - block.timestamp;
+        return (remainingTime, remainingTime < 0);
+    }
+
+    function lendApproval(uint256 listingIndex) public {
+        ListingInfo memory info = getListingInfo(listingIndex);
+        require(msg.sender.balance > info.amount, "You haven't enough balance for lending"); // amount 만큼의 비용이 있는지
+        (info.poster).transfer(info.amount);
+        listNum[listingIndex].status = "excuting";
+        updateTime(listingIndex);
+        emit ApprovalListing(msg.sender, info);
     }
    
 }

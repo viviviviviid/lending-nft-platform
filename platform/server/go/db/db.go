@@ -91,7 +91,6 @@ func GetList(address string) ([]ListingData_Status, error) {
 }
 
 func CloseListing(idx DelistingID) error {
-	fmt.Println("listingIndex: ", idx.ID)
 	result, err := db.Exec(`UPDATE list SET status = 'close' WHERE id = $1`, idx.ID)
 	utils.HandleErr(err)
 	affecteRow, err := result.RowsAffected()

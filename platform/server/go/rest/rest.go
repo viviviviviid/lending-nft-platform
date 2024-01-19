@@ -103,7 +103,6 @@ func delisting(res http.ResponseWriter, req *http.Request) {
 	var delistingID db.DelistingID
 	err = json.Unmarshal(body, &delistingID)
 	utils.HandleErr(err)
-	fmt.Println(delistingID.ID)
 
 	err = db.CloseListing(delistingID)
 	if err != nil {
@@ -142,9 +141,3 @@ func Start() {
 
 	http.ListenAndServe(":8080", corsHandler(router))
 }
-
-// API
-// 전부 트잭이 들어간 뒤에, 컨펌 응답이 오면 DB CURD.
-// listing
-// delisting
-// buy -> delisting

@@ -71,13 +71,6 @@ const NFTList = ({ web3, account }) => {
     });
   }
 
-  // const closeListing = async (platformContract) => {
-
-  //   await platformContract.methods.closeListing(listingIndex).send({ from: account }) 
-  // }
-
-  // closeListig(uint256 listingIndex)
-
   const submitLoanProposal = async (selectedNFT) => {
     const standardContract_721 = new web3.eth.Contract(StandardABI, selectedNFT.contract.address);
     const platformContract = new web3.eth.Contract(platformABI, platformHx);

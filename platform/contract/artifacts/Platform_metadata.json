@@ -11,13 +11,69 @@
 					{
 						"indexed": false,
 						"internalType": "address",
+						"name": "loaner",
+						"type": "address"
+					},
+					{
+						"components": [
+							{
+								"internalType": "address payable",
+								"name": "poster",
+								"type": "address"
+							},
+							{
+								"internalType": "address",
+								"name": "collectionAddr",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "tokenId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "amount",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "duration",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "APR",
+								"type": "uint256"
+							},
+							{
+								"internalType": "bytes32",
+								"name": "status",
+								"type": "bytes32"
+							}
+						],
+						"indexed": false,
+						"internalType": "struct Platform.ListingInfo",
+						"name": "info",
+						"type": "tuple"
+					}
+				],
+				"name": "ApprovalListing",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
 						"name": "owner",
 						"type": "address"
 					},
 					{
 						"components": [
 							{
-								"internalType": "address",
+								"internalType": "address payable",
 								"name": "poster",
 								"type": "address"
 							},
@@ -69,7 +125,7 @@
 						"type": "uint256"
 					}
 				],
-				"name": "closeListig",
+				"name": "closeListing",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -119,7 +175,7 @@
 					{
 						"components": [
 							{
-								"internalType": "address",
+								"internalType": "address payable",
 								"name": "poster",
 								"type": "address"
 							},
@@ -163,19 +219,6 @@
 				"type": "function"
 			},
 			{
-				"inputs": [],
-				"name": "getMyListing",
-				"outputs": [
-					{
-						"internalType": "uint256[]",
-						"name": "",
-						"type": "uint256[]"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
 				"inputs": [
 					{
 						"internalType": "address",
@@ -198,6 +241,43 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
+						"name": "listingIndex",
+						"type": "uint256"
+					}
+				],
+				"name": "isExpired",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "listingIndex",
+						"type": "uint256"
+					}
+				],
+				"name": "lendApproval",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
 						"name": "",
 						"type": "uint256"
 					}
@@ -205,7 +285,7 @@
 				"name": "listNum",
 				"outputs": [
 					{
-						"internalType": "address",
+						"internalType": "address payable",
 						"name": "poster",
 						"type": "address"
 					},
@@ -299,6 +379,19 @@
 				],
 				"stateMutability": "view",
 				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "listingIndex",
+						"type": "uint256"
+					}
+				],
+				"name": "updateTime",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
 			}
 		],
 		"devdoc": {
@@ -345,11 +438,11 @@
 			]
 		},
 		"platform.sol": {
-			"keccak256": "0xfdfd217e3a4c89eb5048c498fa8707cebe58bb36775bf317b4a1908fb2e0b729",
+			"keccak256": "0x5be91260215791d59a22b9f0604d62a89df21ee50d6c02ba2fe7c1bf4d90f3d5",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://5d300c0723f3033d78f728a438a6c0f29f20349bc6285134df2c94721b2d1ecc",
-				"dweb:/ipfs/QmPBdSED34gMaZQrgvKL2ah8qbL4EA8mWyprJnTQGdaEhd"
+				"bzz-raw://c3024ac45b980585b364d75c56fa0102cffd6fa56cd34b6a26db90a6dd499d8b",
+				"dweb:/ipfs/QmWhiwXguvohYWSTeHwxoKyzztNeLUpWxJoXP7cvd3KUKL"
 			]
 		}
 	},
