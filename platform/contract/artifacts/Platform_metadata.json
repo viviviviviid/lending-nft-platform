@@ -174,6 +174,118 @@
 				"type": "event"
 			},
 			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					},
+					{
+						"components": [
+							{
+								"internalType": "address payable",
+								"name": "poster",
+								"type": "address"
+							},
+							{
+								"internalType": "address",
+								"name": "collectionAddr",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "tokenId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "amount",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "duration",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "APR",
+								"type": "uint256"
+							},
+							{
+								"internalType": "bytes32",
+								"name": "status",
+								"type": "bytes32"
+							}
+						],
+						"indexed": false,
+						"internalType": "struct Platform.ListingInfo",
+						"name": "info",
+						"type": "tuple"
+					}
+				],
+				"name": "repaying",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"components": [
+							{
+								"internalType": "address payable",
+								"name": "poster",
+								"type": "address"
+							},
+							{
+								"internalType": "address",
+								"name": "collectionAddr",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "tokenId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "amount",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "duration",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "APR",
+								"type": "uint256"
+							},
+							{
+								"internalType": "bytes32",
+								"name": "status",
+								"type": "bytes32"
+							}
+						],
+						"internalType": "struct Platform.ListingInfo",
+						"name": "info",
+						"type": "tuple"
+					}
+				],
+				"name": "calculateRepayAmount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "uint256",
@@ -272,6 +384,56 @@
 					}
 				],
 				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"components": [
+							{
+								"internalType": "address payable",
+								"name": "poster",
+								"type": "address"
+							},
+							{
+								"internalType": "address",
+								"name": "collectionAddr",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "tokenId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "amount",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "duration",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "APR",
+								"type": "uint256"
+							},
+							{
+								"internalType": "bytes32",
+								"name": "status",
+								"type": "bytes32"
+							}
+						],
+						"internalType": "struct Platform.ListingInfo",
+						"name": "info",
+						"type": "tuple"
+					}
+				],
+				"name": "giveBackNFT",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -444,6 +606,19 @@
 						"type": "uint256"
 					}
 				],
+				"name": "repayLoan",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "listingIndex",
+						"type": "uint256"
+					}
+				],
 				"name": "updateTime",
 				"outputs": [],
 				"stateMutability": "nonpayable",
@@ -494,11 +669,11 @@
 			]
 		},
 		"platform.sol": {
-			"keccak256": "0x0aed5414e06282e3631e80a5ee212ca23fc77e61f86738745e7906380b382d4b",
+			"keccak256": "0x775e83ddadae200641bef6db64f1edbb754d1fc867e9f45559449f0148ac2edb",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://e528401038d90670429874f5309ac2398c8aed276e33241bb8e76a8f0961ddb7",
-				"dweb:/ipfs/QmWxHZ2tpkG9C9GvHMr2iVy4Va7mBRtyAATtxWR2SvavGM"
+				"bzz-raw://d29c2666e789d46a1e626fe1aac85eaed4a5bb96b6c40af6eb14e2f7b4c1d855",
+				"dweb:/ipfs/QmSAGYZ4PGcaRToAeJBYhMZ1trewefHEchkizXN3XaffPY"
 			]
 		}
 	},

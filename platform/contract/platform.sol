@@ -10,6 +10,7 @@ contract Platform {
     event NewListing(address owner, ListingInfo info);
     event CancelListing(address owner, ListingInfo info);
     event ApprovalListing(address loaner, ListingInfo info);
+    event repaying(address owner, ListingInfo info);
     
     struct ListingInfo {
         address payable poster;
@@ -24,6 +25,7 @@ contract Platform {
     mapping(uint256 => ListingInfo) public listNum;
     mapping(address => uint256[]) addrList;
     mapping(uint256 => uint256) updatedTime;
+    mapping(uint256 => address payable) loaner;
 
     uint256 counter;
     uint256 monthToSec = 2592000;
@@ -93,12 +95,34 @@ contract Platform {
         require(msg.sender.balance > info.amount, "You haven't enough balance for lending"); // amount 만큼의 비용이 있는지
         (info.poster).transfer(info.amount);
         info.status = "excuting";
+        loaner[listingIndex] = payable(msg.sender);
         updateTime(listingIndex);
         emit ApprovalListing(msg.sender, info);
     }
 
+    function repayLoan(uint256 listingIndex) public {
+        ListingInfo memory info = getListingInfo(listingIndex);
+        require(info.poster == msg.sender, "You are not poster");
+        require(info.status == bytes32("excuting"), "This is expired or not excuted yet");
+        uint256 repayAmount = calculateRepayAmount(info);
+        require(repayAmount < msg.sender.balance, "Not enough balance for repaying");
+        loaner[listingIndex].transfer(repayAmount);
+        info.status = "repayed";
+        giveBackNFT(info);
+        updateTime(listingIndex);
+        emit repaying(msg.sender, info);
+    }
 
-   
+    function calculateRepayAmount(ListingInfo memory info) public returns (uint256) {
+        // APR 계산법 공부해서 적용하기
+    }
+
+    function giveBackNFT(ListingInfo memory info) public {
+        require(info.poster == msg.sender, "You are not poster");
+        require(info.status == bytes32("repayed"), "This isn't repay yet");
+        // 컨트랙트 내부의 NFT를 poster에게 돌려줌
+        info.status = "closed";
+    }
 }
 
 
