@@ -232,46 +232,9 @@
 			{
 				"inputs": [
 					{
-						"components": [
-							{
-								"internalType": "address payable",
-								"name": "poster",
-								"type": "address"
-							},
-							{
-								"internalType": "address",
-								"name": "collectionAddr",
-								"type": "address"
-							},
-							{
-								"internalType": "uint256",
-								"name": "tokenId",
-								"type": "uint256"
-							},
-							{
-								"internalType": "uint256",
-								"name": "amount",
-								"type": "uint256"
-							},
-							{
-								"internalType": "uint256",
-								"name": "duration",
-								"type": "uint256"
-							},
-							{
-								"internalType": "uint256",
-								"name": "APR",
-								"type": "uint256"
-							},
-							{
-								"internalType": "bytes32",
-								"name": "status",
-								"type": "bytes32"
-							}
-						],
-						"internalType": "struct Platform.ListingInfo",
-						"name": "info",
-						"type": "tuple"
+						"internalType": "uint256",
+						"name": "listingIndex",
+						"type": "uint256"
 					}
 				],
 				"name": "calculateRepayAmount",
@@ -282,7 +245,7 @@
 						"type": "uint256"
 					}
 				],
-				"stateMutability": "nonpayable",
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -669,11 +632,11 @@
 			]
 		},
 		"platform.sol": {
-			"keccak256": "0x775e83ddadae200641bef6db64f1edbb754d1fc867e9f45559449f0148ac2edb",
+			"keccak256": "0x30c9b80b3a55e368426e2bb59803764925af27669dde0705b219b531196dfa8e",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://d29c2666e789d46a1e626fe1aac85eaed4a5bb96b6c40af6eb14e2f7b4c1d855",
-				"dweb:/ipfs/QmSAGYZ4PGcaRToAeJBYhMZ1trewefHEchkizXN3XaffPY"
+				"bzz-raw://e5e87bce8f1cd1f1397a041db08c5c990a6e39132b73199d96517ef65a0373a9",
+				"dweb:/ipfs/QmTTFfSMjgujDX74WxspERFUu56zeCpkCEPwEfw7xVzwcD"
 			]
 		}
 	},

@@ -27,9 +27,12 @@ contract Platform {
     mapping(uint256 => uint256) updatedTime;
     mapping(uint256 => address payable) loaner;
 
-    uint256 counter;
+    uint256 counter = 1;
+    uint256 yearToDay = 365;
     uint256 monthToSec = 2592000;
+    uint256 dayToSec = 86400;
     uint256 minTosec = 60;
+    
     
     function getListing(address addr) public view returns (uint256[] memory) {
         return addrList[addr];
@@ -100,30 +103,36 @@ contract Platform {
         emit ApprovalListing(msg.sender, info);
     }
 
-    function repayLoan(uint256 listingIndex) public {
-        ListingInfo memory info = getListingInfo(listingIndex);
-        require(info.poster == msg.sender, "You are not poster");
-        require(info.status == bytes32("excuting"), "This is expired or not excuted yet");
-        uint256 repayAmount = calculateRepayAmount(info);
-        require(repayAmount < msg.sender.balance, "Not enough balance for repaying");
-        loaner[listingIndex].transfer(repayAmount);
-        info.status = "repayed";
-        giveBackNFT(info);
-        updateTime(listingIndex);
-        emit repaying(msg.sender, info);
-    }
+// 살리기 반환 신청시 NFT가 돌아오지 않는 에러
 
-    function calculateRepayAmount(ListingInfo memory info) public returns (uint256) {
-        // APR 계산법 공부해서 적용하기
-    }
+//     function repayLoan(uint256 listingIndex) public {
+//         ListingInfo memory info = getListingInfo(listingIndex);
+//         require(info.poster == msg.sender, "You are not poster");
+//         // require(info.status == bytes32("excuting"), "This is expired or not excuted yet");
+//         uint256 repayAmount = calculateRepayAmount(listingIndex);
+//         require(repayAmount < msg.sender.balance, "Not enough balance for repaying");
+//         // loaner[listingIndex].transfer(repayAmount);
+//         info.status = "repayed";
+//         giveBackNFT(info);
+//         updateTime(listingIndex);
+//         emit repaying(msg.sender, info);
+//     }
 
-    function giveBackNFT(ListingInfo memory info) public {
-        require(info.poster == msg.sender, "You are not poster");
-        require(info.status == bytes32("repayed"), "This isn't repay yet");
-        // 컨트랙트 내부의 NFT를 poster에게 돌려줌
-        info.status = "closed";
-    }
-}
+//     function calculateRepayAmount(uint256 listingIndex) public view returns (uint256) {
+//         ListingInfo memory info = getListingInfo(listingIndex);
+//         uint256 interestPerDay = info.amount * (info.APR / 100 / yearToDay);
+//         uint256 elapsedDays = (block.timestamp - updatedTime[listingIndex]) /  dayToSec;
+//         uint256 sumResult = info.amount + interestPerDay * elapsedDays;
+//         return sumResult;
+//     }
+    
+//     function giveBackNFT(ListingInfo memory info) public {
+//         require(info.poster == msg.sender, "You are not poster");
+//         require(info.status == bytes32("repayed"), "This isn't repay yet");
+//         IERC721(info.collectionAddr).transferFrom(address(this), msg.sender, info.tokenId);
+//         info.status = "closed";
+//     }
+// }
 
 
 
