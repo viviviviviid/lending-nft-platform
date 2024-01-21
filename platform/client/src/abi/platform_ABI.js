@@ -172,6 +172,19 @@ const platformABI = [
 		"inputs": [
 			{
 				"indexed": false,
+				"internalType": "uint256",
+				"name": "num",
+				"type": "uint256"
+			}
+		],
+		"name": "check",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
 				"internalType": "address",
 				"name": "owner",
 				"type": "address"
@@ -222,6 +235,19 @@ const platformABI = [
 		],
 		"name": "repaying",
 		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "listingIndex",
+				"type": "uint256"
+			}
+		],
+		"name": "approveLoan",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
 		"inputs": [
@@ -346,46 +372,28 @@ const platformABI = [
 	{
 		"inputs": [
 			{
-				"components": [
-					{
-						"internalType": "address payable",
-						"name": "poster",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "collectionAddr",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "tokenId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "amount",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "duration",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "APR",
-						"type": "uint256"
-					},
-					{
-						"internalType": "bytes32",
-						"name": "status",
-						"type": "bytes32"
-					}
-				],
-				"internalType": "struct Platform.ListingInfo",
-				"name": "info",
-				"type": "tuple"
+				"internalType": "uint256",
+				"name": "num",
+				"type": "uint256"
+			}
+		],
+		"name": "getUpdateTime",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "listingIndex",
+				"type": "uint256"
 			}
 		],
 		"name": "giveBackNFT",
@@ -440,19 +448,6 @@ const platformABI = [
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "listingIndex",
-				"type": "uint256"
-			}
-		],
-		"name": "lendApproval",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
 				"name": "",
 				"type": "uint256"
 			}
@@ -493,6 +488,25 @@ const platformABI = [
 				"internalType": "bytes32",
 				"name": "status",
 				"type": "bytes32"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "num",
+				"type": "uint256"
+			}
+		],
+		"name": "loanerOf",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
 			}
 		],
 		"stateMutability": "view",
@@ -582,4 +596,5 @@ const platformABI = [
 		"type": "function"
 	}
 ]
+
 export default platformABI;

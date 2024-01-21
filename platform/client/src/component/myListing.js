@@ -15,22 +15,38 @@ const MyListing = ({ web3, account }) => {
   }, []);
 
   const closeListing = async (selectedNFT) => {
-    const platformContract = new web3.eth.Contract(platformABI, platformHx);
-    await platformContract.methods.closeListing(selectedNFT.ID).send({ from: account });
+    try{
+      const platformContract = new web3.eth.Contract(platformABI, platformHx);
+      await platformContract.methods.closeListing(selectedNFT.ID).send({ from: account });
 
-    const data = {
-      id: selectedNFT.ID
+      const data = {
+        id: selectedNFT.ID
+      }
+
+      const response = await fetch('http://localhost:8080/cancel', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+    }catch(err){
+      console.error(err);
+      return;
     }
-
-    const response = await fetch('http://localhost:8080/cancel', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
- 
   };
+
+  const repayListing = async (selectedNFT) => {
+    try{
+      const platformContract = new web3.eth.Contract(platformABI, platformHx);
+      await platformContract.methods.repayLoan(selectedNFT.ID).send({ from: account });
+    }catch(err){
+      console.error(err);
+      return;
+    }
+  }
+
+  console.log(listings);
 
   return (
     <div>
@@ -43,6 +59,7 @@ const MyListing = ({ web3, account }) => {
           <p>Amount: {listing.Amount}</p>
           <p>Duration: {listing.Duration}</p>
           <p>APR: {listing.APR}</p>
+          <p>Status: {listing.Status}</p>
           {listing.ImageUrl && (
             <img
               src={listing.ImageUrl}
@@ -53,7 +70,12 @@ const MyListing = ({ web3, account }) => {
               }}
             />
           )}
-          <button onClick={() => closeListing(listing)}>상장 취소</button>
+          {listing.Status === 'executing' && (
+            <button onClick={() => repayListing(listing)}>대출금 상환</button>
+          )}
+          {listing.Status === 'open' && (
+            <button onClick={() => closeListing(listing)}>상장 취소</button>
+          )}
         </div>
       ))}
     </div>
@@ -75,3 +97,5 @@ async function fetchListings(account) {
 }
 
 export default MyListing;
+
+

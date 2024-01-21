@@ -47,55 +47,66 @@ const NFTList = ({ web3, account }) => {
   }
 
   const openListing = async (platformContract) => {
-    await platformContract.methods.openListing(
-      selectedNFT.contract.address, Number(selectedNFT.tokenId),
-      amount, duration, APR
-    ).send({ from: account })
-    
-    const data = {
-      Poster: account,
-      Collection: selectedNFT.contract.address,
-      TokenId: Number(selectedNFT.tokenId),
-      ImageUrl: selectedNFT.image.originalUrl,
-      Amount: amount,
-      Duration: duration,
-      APR: APR
-    };
+    try{
+      await platformContract.methods.openListing(
+        selectedNFT.contract.address, Number(selectedNFT.tokenId),
+        amount, duration, APR
+      ).send({ from: account })
+      
+      const data = {
+        Poster: account,
+        Collection: selectedNFT.contract.address,
+        TokenId: Number(selectedNFT.tokenId),
+        ImageUrl: selectedNFT.image.originalUrl,
+        Amount: amount,
+        Duration: duration,
+        APR: APR
+      };
 
-    const response = await fetch('http://localhost:8080/open', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
+      const response = await fetch('http://localhost:8080/open', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+    }catch(err){
+      console.error(err);
+      return;
+    }
   }
 
   const submitLoanProposal = async (selectedNFT) => {
-    const standardContract_721 = new web3.eth.Contract(StandardABI, selectedNFT.contract.address);
-    const platformContract = new web3.eth.Contract(platformABI, platformHx);
-    const owner = (await platformContract.methods.ownerOf(selectedNFT.contract.address, Number(selectedNFT.tokenId)).call()).toUpperCase();
+    try{
+      const standardContract_721 = new web3.eth.Contract(StandardABI, selectedNFT.contract.address);
+      const platformContract = new web3.eth.Contract(platformABI, platformHx);
+      const owner = (await platformContract.methods.ownerOf(selectedNFT.contract.address, Number(selectedNFT.tokenId)).call()).toUpperCase();
+      
+      if(owner !== account.toUpperCase()){
+        console.error("Not holder");
+        closeModal();
+        return;
+      }
+      
+      const isApproved = await platformContract.methods.isApprove(selectedNFT.contract.address).call({ from: account });
+      if(!isApproved){
+        await approve(standardContract_721)
+        .then(result => console.log(result))
+        .catch(err => {
+          console.error(err);
+          return;
+        })
+      }
     
-    if(owner !== account.toUpperCase()){
-      console.error("Not holder");
+      await openListing(platformContract);
+
       closeModal();
+      window.location.href = 'http://localhost:3000/list';
+    }catch(err){
+      console.error(err);
       return;
     }
-    
-    const isApproved = await platformContract.methods.isApprove(selectedNFT.contract.address).call({ from: account });
-    if(!isApproved){
-      await approve(standardContract_721)
-      .then(result => console.log(result))
-      .catch(err => {
-        console.error(err);
-        return;
-      })
-    }
-  
-    await openListing(platformContract);
-
-    closeModal();
-    window.location.href = 'http://localhost:3000/list';
   };
 
   useEffect(() => {

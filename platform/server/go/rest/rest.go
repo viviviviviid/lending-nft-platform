@@ -83,7 +83,6 @@ func getList(res http.ResponseWriter, req *http.Request) {
 
 func listing(res http.ResponseWriter, req *http.Request) {
 	body, err := io.ReadAll(req.Body)
-	fmt.Printf("%s\n", body)
 	utils.HandleErr(err)
 	utils.HandleErr(json.Unmarshal(body, &listingData))
 

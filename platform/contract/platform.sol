@@ -11,6 +11,7 @@ contract Platform {
     event CancelListing(address owner, ListingInfo info);
     event ApprovalListing(address loaner, ListingInfo info);
     event repaying(address owner, ListingInfo info);
+    event check(uint256 num);
     
     struct ListingInfo {
         address payable poster;
@@ -33,7 +34,6 @@ contract Platform {
     uint256 dayToSec = 86400;
     uint256 minTosec = 60;
     
-    
     function getListing(address addr) public view returns (uint256[] memory) {
         return addrList[addr];
     }
@@ -52,6 +52,14 @@ contract Platform {
 
     function isApprove(address collectionAddr) public view returns (bool) {
         return IERC721(collectionAddr).isApprovedForAll(msg.sender, address(this));
+    }
+
+    function loanerOf(uint256 num) public view returns (address) {
+        return loaner[num];
+    }
+
+    function getUpdateTime(uint256 num) public view returns (uint256) {
+        return updatedTime[num];
     }
 
     function openListing(
@@ -73,7 +81,7 @@ contract Platform {
     }
     
     function closeListing(uint256 listingIndex) public {
-        ListingInfo memory info = getListingInfo(listingIndex);
+        ListingInfo storage info = listNum[listingIndex];
         require(info.poster == msg.sender, "You are not poster of the list");
         require(info.status == bytes32("open"), "Not opening list"); // 새로 추가된 제약 -> 에러 확인 못했음
         info.status = "cancel";
@@ -93,48 +101,48 @@ contract Platform {
         return (remainingTime, remainingTime < 0);
     }
 
-    function lendApproval(uint256 listingIndex) public {
-        ListingInfo memory info = getListingInfo(listingIndex);
-        require(msg.sender.balance > info.amount, "You haven't enough balance for lending"); // amount 만큼의 비용이 있는지
-        (info.poster).transfer(info.amount);
-        info.status = "excuting";
+    function approveLoan(uint256 listingIndex) public {
+        ListingInfo storage info = listNum[listingIndex]; 
+        require(msg.sender != info.poster, "It's your own loan application.");
+        uint256 amountInWei = info.amount * 1 ether; // 이더 단위에서 Wei 단위로 변환
+        require(msg.sender.balance >= amountInWei, "You haven't enough balance for lending");
+        info.status = "executing";
         loaner[listingIndex] = payable(msg.sender);
         updateTime(listingIndex);
+        (bool success, ) = info.poster.call{value: amountInWei}("");
+        require(success, "Transfer failed.");
         emit ApprovalListing(msg.sender, info);
     }
 
-// 살리기 반환 신청시 NFT가 돌아오지 않는 에러
 
-//     function repayLoan(uint256 listingIndex) public {
-//         ListingInfo memory info = getListingInfo(listingIndex);
-//         require(info.poster == msg.sender, "You are not poster");
-//         // require(info.status == bytes32("excuting"), "This is expired or not excuted yet");
-//         uint256 repayAmount = calculateRepayAmount(listingIndex);
-//         require(repayAmount < msg.sender.balance, "Not enough balance for repaying");
-//         // loaner[listingIndex].transfer(repayAmount);
-//         info.status = "repayed";
-//         giveBackNFT(info);
-//         updateTime(listingIndex);
-//         emit repaying(msg.sender, info);
-//     }
+    function repayLoan(uint256 listingIndex) public {
+        ListingInfo storage info = listNum[listingIndex];
+        require(info.poster == msg.sender, "You are not poster");
+        require(info.status == bytes32("excuting"), "This is expired or not excuted yet");
+        uint256 repayAmount = calculateRepayAmount(listingIndex);
+        require(repayAmount < msg.sender.balance, "Not enough balance for repaying");
+        loaner[listingIndex].transfer(repayAmount);
+        info.status = "repayed";
+        emit repaying(msg.sender, info);
+    }
 
-//     function calculateRepayAmount(uint256 listingIndex) public view returns (uint256) {
-//         ListingInfo memory info = getListingInfo(listingIndex);
-//         uint256 interestPerDay = info.amount * (info.APR / 100 / yearToDay);
-//         uint256 elapsedDays = (block.timestamp - updatedTime[listingIndex]) /  dayToSec;
-//         uint256 sumResult = info.amount + interestPerDay * elapsedDays;
-//         return sumResult;
-//     }
+    function calculateRepayAmount(uint256 listingIndex) public view returns (uint256) {
+        ListingInfo memory info = getListingInfo(listingIndex);
+        uint256 interestPerDay = info.amount * (info.APR / 100 / yearToDay);
+        uint256 elapsedDays = (block.timestamp - updatedTime[listingIndex]) /  dayToSec;
+        uint256 sumResult = info.amount + interestPerDay * elapsedDays;
+        return sumResult;
+    }
     
-//     function giveBackNFT(ListingInfo memory info) public {
-//         require(info.poster == msg.sender, "You are not poster");
-//         require(info.status == bytes32("repayed"), "This isn't repay yet");
-//         IERC721(info.collectionAddr).transferFrom(address(this), msg.sender, info.tokenId);
-//         info.status = "closed";
-//     }
-// }
-
-
+    function giveBackNFT(uint256 listingIndex) public {
+        ListingInfo memory info = getListingInfo(listingIndex);
+        require(info.poster == msg.sender, "You are not poster");
+        require(info.status == bytes32("repayed"), "This isn't repay yet");
+        IERC721(info.collectionAddr).transferFrom(address(this), msg.sender, info.tokenId);
+        info.status = "closed";
+        updateTime(listingIndex);
+    }
+}
 
 // contract NFTOwner {
 //     IERC721 public nftContract;

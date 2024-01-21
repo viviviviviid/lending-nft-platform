@@ -72,7 +72,7 @@ func GetList(address string) ([]ListingData_Status, error) {
 	if address == "" {
 		rows, err = db.Query("SELECT * FROM public.list WHERE status = 'open' ORDER BY id ASC")
 	} else {
-		rows, err = db.Query(`SELECT * FROM list WHERE status = 'open' AND poster = $1 ORDER BY id ASC`, lowercaseAddress)
+		rows, err = db.Query(`SELECT * FROM list WHERE (status = 'open' OR status = 'executing') AND poster = $1 ORDER BY id ASC`, lowercaseAddress)
 	}
 
 	utils.HandleErr(err)

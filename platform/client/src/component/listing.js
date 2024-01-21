@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import platformABI from '../abi/platform_ABI';
 
+const platformHx = process.env.REACT_APP_NFT_CONTRACT_ADDRESS;
 
 const Listing = ({ web3, account }) => {
   const [listings, setListings] = useState([]);
@@ -12,6 +14,24 @@ const Listing = ({ web3, account }) => {
     loadData();
   }, []);
 
+  const approveLoan = async (selectedNFT) => {
+    try {
+      console.log(selectedNFT);
+      const platformContract = new web3.eth.Contract(platformABI, platformHx);
+      const amountInWei = web3.utils.toWei(selectedNFT.Amount.toString(), 'ether');
+  
+      await platformContract.methods.approveLoan(selectedNFT.ID).send({
+        from: account,
+        value: amountInWei
+      });
+
+    } catch (err) {
+      console.error(err);
+      return;
+    }
+  };
+  
+
   return (
     <div>
       <h1>오픈된 담보 리스트</h1>
@@ -23,6 +43,7 @@ const Listing = ({ web3, account }) => {
           <p>Amount: {listing.Amount}</p>
           <p>Duration: {listing.Duration}</p>
           <p>APR: {listing.APR}</p>
+          <p>Status: {listing.Status}</p>
           {listing.ImageUrl && (
             <img
               src={listing.ImageUrl}
@@ -32,6 +53,9 @@ const Listing = ({ web3, account }) => {
                 e.target.src = 'fallback-image-url'; // 이미지 로드 실패 시 대체 이미지 URL
               }}
             />
+          )}
+          {listing.Status === 'open' && listing.Poster !== account && (
+            <button onClick={() => approveLoan(listing)}>대출 승인</button>
           )}
         </div>
       ))}
