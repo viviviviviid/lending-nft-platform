@@ -39,7 +39,14 @@ const MyListing = ({ web3, account }) => {
   const repayListing = async (selectedNFT) => {
     try{
       const platformContract = new web3.eth.Contract(platformABI, platformHx);
-      await platformContract.methods.repayLoan(selectedNFT.ID).send({ from: account });
+      const repayAmount = await platformContract.methods.calculateRepayAmount(selectedNFT.ID).call();
+      console.log("repayAmount: ", repayAmount);
+      const amountInWei = web3.utils.toWei(repayAmount.toString(), 'ether');
+      await platformContract.methods.repayLoan(selectedNFT.ID).send({
+        from: account,
+        value: amountInWei
+      });
+
     }catch(err){
       console.error(err);
       return;

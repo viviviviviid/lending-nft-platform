@@ -101,7 +101,7 @@ contract Platform {
         return (remainingTime, remainingTime < 0);
     }
 
-    function approveLoan(uint256 listingIndex) public {
+    function approveLoan(uint256 listingIndex) public payable {
         ListingInfo storage info = listNum[listingIndex]; 
         require(msg.sender != info.poster, "It's your own loan application.");
         uint256 amountInWei = info.amount * 1 ether; // 이더 단위에서 Wei 단위로 변환
@@ -109,30 +109,34 @@ contract Platform {
         info.status = "executing";
         loaner[listingIndex] = payable(msg.sender);
         updateTime(listingIndex);
-        (bool success, ) = info.poster.call{value: amountInWei}("");
-        require(success, "Transfer failed.");
+        bool sent = info.poster.send(msg.value);
+        require(sent, "Failed to send Ether");
         emit ApprovalListing(msg.sender, info);
     }
 
-
-    function repayLoan(uint256 listingIndex) public {
+    function repayLoan(uint256 listingIndex) public payable {
         ListingInfo storage info = listNum[listingIndex];
         require(info.poster == msg.sender, "You are not poster");
-        require(info.status == bytes32("excuting"), "This is expired or not excuted yet");
+        require(info.status == bytes32("executing"), "This is expired or not excuted yet");
         uint256 repayAmount = calculateRepayAmount(listingIndex);
         require(repayAmount < msg.sender.balance, "Not enough balance for repaying");
-        loaner[listingIndex].transfer(repayAmount);
+        bool sent = loaner[listingIndex].send(msg.value);
+        require(sent, "Failed to send Ether");
         info.status = "repayed";
+        giveBackNFT(listingIndex);
         emit repaying(msg.sender, info);
     }
 
     function calculateRepayAmount(uint256 listingIndex) public view returns (uint256) {
         ListingInfo memory info = getListingInfo(listingIndex);
-        uint256 interestPerDay = info.amount * (info.APR / 100 / yearToDay);
-        uint256 elapsedDays = (block.timestamp - updatedTime[listingIndex]) /  dayToSec;
-        uint256 sumResult = info.amount + interestPerDay * elapsedDays;
+        uint256 scaledAPR = info.APR * 1000; // APR을 고정 소수점 수로 변환 (10% -> 1000)
+        uint256 interestPerDay = info.amount * scaledAPR / 100 / 1000 / yearToDay; 
+        uint256 elapsedDays = (block.timestamp - updatedTime[listingIndex]) / dayToSec;
+        uint256 totalInterest = interestPerDay * elapsedDays;
+        uint256 sumResult = info.amount + totalInterest;
         return sumResult;
     }
+
     
     function giveBackNFT(uint256 listingIndex) public {
         ListingInfo memory info = getListingInfo(listingIndex);

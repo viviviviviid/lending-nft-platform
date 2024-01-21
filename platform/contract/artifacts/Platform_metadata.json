@@ -252,7 +252,7 @@
 				],
 				"name": "approveLoan",
 				"outputs": [],
-				"stateMutability": "nonpayable",
+				"stateMutability": "payable",
 				"type": "function"
 			},
 			{
@@ -585,7 +585,7 @@
 				],
 				"name": "repayLoan",
 				"outputs": [],
-				"stateMutability": "nonpayable",
+				"stateMutability": "payable",
 				"type": "function"
 			},
 			{
@@ -646,11 +646,11 @@
 			]
 		},
 		"platform.sol": {
-			"keccak256": "0x7fd44fc78820b50ec505e10d98d82f642bac737591cbce06a95b60f9c447fc5a",
+			"keccak256": "0x819e65a80bfbfd12e06c3dae61e9fe1dcfe08223425ac9404a9164ba1bc047ed",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://5e8b3bf5a520a12ab9cc9fd79f262720ecb8d670e989b4976b17b26a052ca352",
-				"dweb:/ipfs/QmWATS35TPwqw8P4u8p3PXYTjDdNyiAbmUF7KCaSNFE13B"
+				"bzz-raw://80b0ad32431a05c14823f5a702b6459545d226cefb65d03f58eb286266e2eeb3",
+				"dweb:/ipfs/QmUEhgfRefbum8GXHPhMt4dvKMrs9KCVarHhov8KQ1AcNN"
 			]
 		}
 	},

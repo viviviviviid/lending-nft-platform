@@ -135,7 +135,6 @@ const NFTList = ({ web3, account }) => {
               }}
             />
           )}
-          {/* <button onClick={() => approve(nft)}>Approve</button> */}
           <button onClick={() => openModal(nft)}>담보로 맡기기</button>
         </div>
       ))}
