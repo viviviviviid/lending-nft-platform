@@ -16,21 +16,24 @@ const Listing = ({ web3, account }) => {
 
   const approveLoan = async (selectedNFT) => {
     try {
-      console.log(selectedNFT);
       const platformContract = new web3.eth.Contract(platformABI, platformHx);
       const amountInWei = web3.utils.toWei(selectedNFT.Amount.toString(), 'ether');
-  
       await platformContract.methods.approveLoan(selectedNFT.ID).send({
         from: account,
         value: amountInWei
       });
-
+      const response = await fetch('http://localhost:8080/lend', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({id: selectedNFT.ID}),
+      });
     } catch (err) {
       console.error(err);
       return;
     }
   };
-  
 
   return (
     <div>

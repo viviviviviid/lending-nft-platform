@@ -62,7 +62,6 @@ func getList(res http.ResponseWriter, req *http.Request) {
 		list []db.ListingData_Status
 		err  error
 	)
-
 	vars := mux.Vars(req)
 	address := vars["address"]
 	all := req.URL.Query().Get("all")
@@ -75,7 +74,6 @@ func getList(res http.ResponseWriter, req *http.Request) {
 
 	jsonData, err := json.Marshal(list)
 	utils.HandleErr(err)
-
 	res.Header().Set("Content-Type", "application/json")
 	res.WriteHeader(http.StatusOK)
 	res.Write(jsonData)
@@ -95,15 +93,15 @@ func listing(res http.ResponseWriter, req *http.Request) {
 	res.WriteHeader(http.StatusCreated) // 201 Created
 }
 
-func delisting(res http.ResponseWriter, req *http.Request) {
+func lend(res http.ResponseWriter, req *http.Request) {
 	body, err := io.ReadAll(req.Body)
 	utils.HandleErr(err)
 
-	var delistingID db.DelistingID
-	err = json.Unmarshal(body, &delistingID)
+	var executeID db.ExecuteID
+	err = json.Unmarshal(body, &executeID)
 	utils.HandleErr(err)
 
-	err = db.CloseListing(delistingID)
+	err = db.ExecuteListing(executeID)
 	if err != nil {
 		utils.HandleErr(err)
 		res.WriteHeader(http.StatusBadRequest) // 400 Bad Request
@@ -112,10 +110,21 @@ func delisting(res http.ResponseWriter, req *http.Request) {
 	res.WriteHeader(http.StatusOK)
 }
 
-func buy(res http.ResponseWriter, req *http.Request) {
-}
-
 func close(res http.ResponseWriter, req *http.Request) {
+	body, err := io.ReadAll(req.Body)
+	utils.HandleErr(err)
+
+	var closeID db.CloseID
+	err = json.Unmarshal(body, &closeID)
+	utils.HandleErr(err)
+
+	err = db.CloseListing(closeID)
+	if err != nil {
+		utils.HandleErr(err)
+		res.WriteHeader(http.StatusBadRequest) // 400 Bad Request
+		res.Write([]byte(err.Error()))
+	}
+	res.WriteHeader(http.StatusOK)
 }
 
 func Start() {
@@ -127,13 +136,12 @@ func Start() {
 	router.HandleFunc("/login", signIn).Methods("POST")
 	router.HandleFunc("/list/{address}", getList).Methods("GET")
 	router.HandleFunc("/open", listing).Methods("POST")
-	router.HandleFunc("/cancel", delisting).Methods("POST")
-	router.HandleFunc("/buy", buy).Methods("POST")
+	router.HandleFunc("/lend", lend).Methods("POST")
+	router.HandleFunc("/cancel", close).Methods("POST")
 	router.HandleFunc("/close", close).Methods("POST")
 
-	// CORS 미들웨어 설정
 	corsHandler := handlers.CORS(
-		handlers.AllowedOrigins([]string{"http://localhost:3000"}), // 클라이언트 주소
+		handlers.AllowedOrigins([]string{"http://localhost:3000"}),
 		handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}),
 		handlers.AllowedHeaders([]string{"Content-Type", "X-Requested-With", "Authorization"}),
 	)

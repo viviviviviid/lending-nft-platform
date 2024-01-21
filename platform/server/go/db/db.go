@@ -31,7 +31,11 @@ type ListingData_Status struct {
 	Status     string
 }
 
-type DelistingID struct {
+type CloseID struct {
+	ID int
+}
+
+type ExecuteID struct {
 	ID int
 }
 
@@ -58,9 +62,8 @@ func SignUp(addr string) (string, error) {
 	return "register complete", nil
 }
 
-func SignIn(addr string) {
-
-}
+// func SignIn(addr string) {
+// }
 
 func OpenListing(data ListingData) error {
 	_, err := db.Exec(`INSERT INTO list(poster, collection, "tokenId", image, amount, duration, "APR", status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`, data.Poster, data.Collection, data.TokenId, data.ImageUrl, data.Amount, data.Duration, data.APR, "open")
@@ -90,8 +93,16 @@ func GetList(address string) ([]ListingData_Status, error) {
 	return list, err
 }
 
-func CloseListing(idx DelistingID) error {
+func CloseListing(idx CloseID) error {
 	result, err := db.Exec(`UPDATE list SET status = 'close' WHERE id = $1`, idx.ID)
+	utils.HandleErr(err)
+	affecteRow, err := result.RowsAffected()
+	fmt.Println("affecteRow: ", affecteRow)
+	return err
+}
+
+func ExecuteListing(idx ExecuteID) error {
+	result, err := db.Exec(`UPDATE list SET status = 'executing' WHERE id = $1`, idx.ID)
 	utils.HandleErr(err)
 	affecteRow, err := result.RowsAffected()
 	fmt.Println("affecteRow: ", affecteRow)

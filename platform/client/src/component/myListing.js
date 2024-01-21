@@ -18,17 +18,12 @@ const MyListing = ({ web3, account }) => {
     try{
       const platformContract = new web3.eth.Contract(platformABI, platformHx);
       await platformContract.methods.closeListing(selectedNFT.ID).send({ from: account });
-
-      const data = {
-        id: selectedNFT.ID
-      }
-
-      const response = await fetch('http://localhost:8080/cancel', {
+      const response = await fetch('http://localhost:8080/close', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({id: selectedNFT.ID}),
       });
     }catch(err){
       console.error(err);
@@ -45,6 +40,14 @@ const MyListing = ({ web3, account }) => {
       await platformContract.methods.repayLoan(selectedNFT.ID).send({
         from: account,
         value: amountInWei
+      });
+
+      const response = await fetch('http://localhost:8080/close', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({id: selectedNFT.ID}),
       });
 
     }catch(err){
