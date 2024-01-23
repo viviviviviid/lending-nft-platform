@@ -56,8 +56,6 @@ const MyListing = ({ web3, account }) => {
     }
   }
 
-  console.log(listings);
-
   return (
     <div>
       <h1>내가 상장한 리스트</h1>
