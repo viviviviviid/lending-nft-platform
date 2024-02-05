@@ -47,10 +47,17 @@ var (
 
 func InitDB() {
 	var err error
-	connStr := "postgres://viviviviviid:password@localhost/lending?sslmode=disable"
+	connStr := "postgres://postgres:12345678@database-1.AWS_ENDPOINT:5432/postgres?sslmode=require"
 	db, err = sql.Open("postgres", connStr)
-	utils.HandleErr(err)
-	utils.HandleErr(db.Ping())
+	if err != nil {
+		panic(err)
+	}
+
+	err = db.Ping()
+	if err != nil {
+		panic(err)
+	}
+
 	fmt.Println("DB is connected")
 }
 
