@@ -101,6 +101,8 @@ contract Platform {
         return (remainingTime, remainingTime < 0);
     }
 
+    
+
     function approveLoan(uint256 listingIndex) public payable {
         ListingInfo storage info = listNum[listingIndex]; 
         require(msg.sender != info.poster, "It's your own loan application.");
